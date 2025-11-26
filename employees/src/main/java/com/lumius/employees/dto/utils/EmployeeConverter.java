@@ -10,7 +10,12 @@ import com.lumius.employees.entities.EmployeeEntity;
  */
 public class EmployeeConverter {
 
-	public EmployeeDTO toDTO(EmployeeEntity entity) {
+	/**
+	 * Converts the given EmployeeEntity into an EmployeeDTO
+	 * @param entity the EmployeeEntity to be converted
+	 * @return an EmployeeDTO with the same values as the given EmployeeEntity
+	 */
+	public static EmployeeDTO toDTO(EmployeeEntity entity) {
 		return EmployeeDTO.builder()
 				.businessEntityID(entity.getBusinessEntityID())
 				.nationalIDNumber(entity.getNationalIDNumber())
@@ -31,7 +36,12 @@ public class EmployeeConverter {
 				.build();
 	}
 	
-	public EmployeeEntity toEntity(EmployeeDTO dto) {
+	/**
+	 * Converts the given EmployeeDTO into an EmployeeEntity
+	 * @param dto the EmployeeDTO to be converted
+	 * @return an EmployeeEntity with the same values as the given EmployeeDTO
+	 */
+	public static EmployeeEntity toEntity(EmployeeDTO dto) {
 		return EmployeeEntity.builder()
 				.businessEntityID(dto.getBusinessEntityID())
 				.nationalIDNumber(dto.getNationalIDNumber())
