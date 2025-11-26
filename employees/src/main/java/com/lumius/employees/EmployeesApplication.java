@@ -13,7 +13,7 @@ public class EmployeesApplication {
 		
 		SpringApplication app = new SpringApplication(EmployeesApplication.class);
 		
-		configureH2(app);
+//		configureH2(app);
 		
 		app.run(args);
 	}
