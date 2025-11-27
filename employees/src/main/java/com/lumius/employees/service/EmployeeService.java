@@ -58,7 +58,7 @@ public interface EmployeeService {
 	 * @param id ID of existing employee
 	 * @return Empty Optional 
 	 */
-	Optional<Void> deleteEmployeeById(UUID id);
+	Optional<EmployeeDTO> deleteEmployeeById(UUID id);
 
 	
 	
