@@ -17,9 +17,9 @@ public interface EmployeeService {
 	/**
 	 * Saves a new employee to the repository
 	 * @param newEmployee the new employee to be saved
-	 * @return Optional containing newly created employee
+	 * @return newly created employee
 	 */
-	Optional<EmployeeDTO> saveEmployee(EmployeeDTO newEmployee);
+	EmployeeDTO saveEmployee(EmployeeDTO newEmployee);
 	
 	// Read
 	/**

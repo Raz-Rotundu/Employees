@@ -17,9 +17,9 @@ public class EmployeeServiceJPAImpl implements EmployeeService {
 		
 	}
 	@Override
-	public Optional<EmployeeDTO> saveEmployee(EmployeeDTO newEmployee) {
+	public EmployeeDTO saveEmployee(EmployeeDTO newEmployee) {
 		// TODO Auto-generated method stub
-		return Optional.empty();
+		return newEmployee;
 	}
 
 	@Override

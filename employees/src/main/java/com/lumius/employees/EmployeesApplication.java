@@ -2,6 +2,7 @@ package com.lumius.employees;
 
 import java.util.Map;
 
+import org.hibernate.dialect.aggregate.H2AggregateSupport;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -18,7 +19,12 @@ public class EmployeesApplication {
 		app.run(args);
 	}
 
-	
+	/**
+	 * Configures the application to use an in memory H2 db as the repository
+	 * The console is accessible at localhost:8080/h2-console
+	 * Tables will be automatically created based on the entities defined in the service
+	 * @param app the SpringApplication
+	 */
 	public static void configureH2(SpringApplication app) {
 		app.setDefaultProperties(
 				Map.of(
