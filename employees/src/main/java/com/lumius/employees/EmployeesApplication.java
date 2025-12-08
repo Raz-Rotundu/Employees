@@ -10,11 +10,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class EmployeesApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(EmployeesApplication.class, args);
-		
 		SpringApplication app = new SpringApplication(EmployeesApplication.class);
 		
-//		configureH2(app);
 		
 		app.run(args);
 	}
