@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import com.lumius.employees.dto.EmployeeDTO;
+import com.lumius.employees.dto.EmployeeDto;
 
 /**
  * @author Razvan 
@@ -19,7 +19,7 @@ public interface EmployeeService {
 	 * @param newEmployee the new employee to be saved
 	 * @return newly created employee
 	 */
-	EmployeeDTO saveEmployee(EmployeeDTO newEmployee);
+	EmployeeDto saveEmployee(EmployeeDto newEmployee);
 	
 	// Read
 	/**
@@ -27,13 +27,13 @@ public interface EmployeeService {
 	 * @param id the ID of the employee to be retrieved
 	 * @return Optional containing employee if found
 	 */
-	Optional<EmployeeDTO> getEmployeeByID(UUID id);
+	Optional<EmployeeDto> getEmployeeByID(UUID id);
 	
 	/**
 	 * Retrieves all employees present in the repository
 	 * @return A list of all present Employees in the repository
 	 */
-	List<EmployeeDTO> getAllEmployees();
+	List<EmployeeDto> getAllEmployees();
 	
 	// Update
 	/**
@@ -42,7 +42,7 @@ public interface EmployeeService {
 	 * @param updatedEmployee Employee with which to replace the existing entry
 	 * @return Optional containing updated employee it it exists
 	 */
-	Optional<EmployeeDTO> updateEmployee(UUID id, EmployeeDTO updatedEmployee);
+	Optional<EmployeeDto> updateEmployee(UUID id, EmployeeDto updatedEmployee);
 	
 	/**
 	 * Update specific fields of an existing employee
@@ -50,7 +50,7 @@ public interface EmployeeService {
 	 * @param partialEmployee A partially constructed employee, with only fields to be updated having values
 	 * @return
 	 */
-	Optional<EmployeeDTO> updateEmployeeFields(UUID id, EmployeeDTO partialEmployee);
+	Optional<EmployeeDto> updateEmployeeFields(UUID id, EmployeeDto partialEmployee);
 	
 	// Delete
 	/**
@@ -58,7 +58,7 @@ public interface EmployeeService {
 	 * @param id ID of existing employee
 	 * @return Empty Optional 
 	 */
-	Optional<EmployeeDTO> deleteEmployeeById(UUID id);
+	Optional<EmployeeDto> deleteEmployeeById(UUID id);
 
 	
 	

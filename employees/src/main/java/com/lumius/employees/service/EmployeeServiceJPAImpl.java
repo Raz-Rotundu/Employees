@@ -7,7 +7,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import com.lumius.employees.dto.EmployeeDTO;
+import com.lumius.employees.dto.EmployeeDto;
 import com.lumius.employees.dto.utils.EmployeeConverter;
 import com.lumius.employees.repositories.EmployeeRepository;
 
@@ -23,7 +23,7 @@ public class EmployeeServiceJPAImpl implements EmployeeService {
 	
 	
 	@Override
-	public EmployeeDTO saveEmployee(EmployeeDTO newEmployee) {
+	public EmployeeDto saveEmployee(EmployeeDto newEmployee) {
 
 		return EmployeeConverter.toDTO(
 				repository.save(
@@ -32,7 +32,7 @@ public class EmployeeServiceJPAImpl implements EmployeeService {
 
 	
 	@Override
-	public Optional<EmployeeDTO> getEmployeeByID(UUID id) {
+	public Optional<EmployeeDto> getEmployeeByID(UUID id) {
 
 		return repository.findById(id)
 				.map(EmployeeConverter::toDTO);
@@ -40,7 +40,7 @@ public class EmployeeServiceJPAImpl implements EmployeeService {
 
 	
 	@Override
-	public List<EmployeeDTO> getAllEmployees() {
+	public List<EmployeeDto> getAllEmployees() {
 		return repository.findAll()
 				.stream()
 				.map(EmployeeConverter::toDTO)
@@ -48,7 +48,7 @@ public class EmployeeServiceJPAImpl implements EmployeeService {
 	}
 
 	@Override
-	public Optional<EmployeeDTO> updateEmployee(UUID id, EmployeeDTO updatedEmployee) {
+	public Optional<EmployeeDto> updateEmployee(UUID id, EmployeeDto updatedEmployee) {
 		if(repository.existsById(id)) {
 			return Optional.ofNullable(
 					EmployeeConverter.toDTO(
@@ -61,10 +61,10 @@ public class EmployeeServiceJPAImpl implements EmployeeService {
 	}
 
 	@Override
-	public Optional<EmployeeDTO> updateEmployeeFields(UUID id, EmployeeDTO newEmployee) {
+	public Optional<EmployeeDto> updateEmployeeFields(UUID id, EmployeeDto newEmployee) {
 		return repository.findById(id)
 				.map(EmployeeConverter::toDTO)
-			.map(original -> EmployeeDTO.builder()
+			.map(original -> EmployeeDto.builder()
 					// Unchanged
 					.businessEntityID(id)
 					.nationalIDNumber(nullOrEmpty(original.getNationalIDNumber() ) ? newEmployee.getNationalIDNumber() : original.getNationalIDNumber() )
@@ -90,8 +90,8 @@ public class EmployeeServiceJPAImpl implements EmployeeService {
 	}
 
 	@Override
-	public Optional<EmployeeDTO> deleteEmployeeById(UUID id) {
-		Optional<EmployeeDTO> employeeOptional = repository.findById(id)
+	public Optional<EmployeeDto> deleteEmployeeById(UUID id) {
+		Optional<EmployeeDto> employeeOptional = repository.findById(id)
 				.map(EmployeeConverter::toDTO);
 		
 		repository.deleteById(id);

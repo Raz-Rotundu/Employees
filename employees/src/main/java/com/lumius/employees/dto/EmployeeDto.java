@@ -23,7 +23,7 @@ import lombok.ToString;
 @Data
 @EqualsAndHashCode
 @ToString
-public class EmployeeDTO {
+public class EmployeeDto {
 
 	/**
 	 * The ID of the employee within the company, uniquely generated

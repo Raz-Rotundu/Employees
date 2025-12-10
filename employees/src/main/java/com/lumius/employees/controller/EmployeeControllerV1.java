@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.lumius.employees.dto.EmployeeDTO;
+import com.lumius.employees.dto.EmployeeDto;
 import com.lumius.employees.service.EmployeeService;
 
 import jakarta.validation.Valid;
@@ -40,8 +40,8 @@ public class EmployeeControllerV1 {
 	@PostMapping(
 			consumes = "application/json",
 			produces = "application/json")
-	public ResponseEntity<EmployeeDTO> createEmployee(
-			@RequestBody @Valid EmployeeDTO newEmployee) {
+	public ResponseEntity<EmployeeDto> createEmployee(
+			@RequestBody @Valid EmployeeDto newEmployee) {
 		return ResponseEntity.status(HttpStatus.CREATED)
 				.body(service.saveEmployee(newEmployee));
 	}
@@ -50,7 +50,7 @@ public class EmployeeControllerV1 {
 	@GetMapping(
 			value = "/{id}",
 			produces = "application/json")
-	public ResponseEntity<EmployeeDTO> getEmployee(
+	public ResponseEntity<EmployeeDto> getEmployee(
 			@PathVariable("id") UUID id) {
 		return service.getEmployeeByID(id)
 				.map(ResponseEntity::ok)
@@ -60,7 +60,7 @@ public class EmployeeControllerV1 {
 	
 	@GetMapping(
 			produces = "application/json")
-	public ResponseEntity<List<EmployeeDTO>> getAllEmployees() {
+	public ResponseEntity<List<EmployeeDto>> getAllEmployees() {
 		return ResponseEntity.status(HttpStatus.OK)
 				.body(service.getAllEmployees());
 	}
@@ -70,9 +70,9 @@ public class EmployeeControllerV1 {
 			value = "/{id}",
 			consumes = "application/json",
 			produces = "application/json")
-	public ResponseEntity<EmployeeDTO> updateEmployee(
+	public ResponseEntity<EmployeeDto> updateEmployee(
 			@PathVariable("id") UUID id,
-			@RequestBody @Valid EmployeeDTO updatedEmployee) {
+			@RequestBody @Valid EmployeeDto updatedEmployee) {
 		return service.updateEmployee(id, updatedEmployee)
 				.map(ResponseEntity::ok)
 				.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -83,9 +83,9 @@ public class EmployeeControllerV1 {
 			value = "/{id}",
 			consumes = "application/json",
 			produces = "application/json")
-	public ResponseEntity<EmployeeDTO> updateEmployeeFields(
+	public ResponseEntity<EmployeeDto> updateEmployeeFields(
 			@PathVariable("id") UUID id,
-			@RequestBody EmployeeDTO newEmployee) {
+			@RequestBody EmployeeDto newEmployee) {
 		return service.updateEmployeeFields(id, newEmployee)
 				.map(ResponseEntity::ok)
 				.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND)
