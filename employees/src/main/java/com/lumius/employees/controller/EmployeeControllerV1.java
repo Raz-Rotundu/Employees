@@ -41,7 +41,7 @@ public class EmployeeControllerV1 {
 			consumes = "application/json",
 			produces = "application/json")
 	public ResponseEntity<EmployeeDto> createEmployee(
-			@RequestBody @Valid EmployeeDto newEmployee) {
+			@RequestBody EmployeeDto newEmployee) {
 		return ResponseEntity.status(HttpStatus.CREATED)
 				.body(service.saveEmployee(newEmployee));
 	}

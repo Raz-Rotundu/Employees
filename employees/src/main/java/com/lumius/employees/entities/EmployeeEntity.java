@@ -62,7 +62,7 @@ public class EmployeeEntity {
 	 * Employee birth date, formatted to yyyy-MM-dd
 	 */
 	@Column(nullable = false)
-	@NotEmpty
+	@NotNull
 	LocalDate birthDate;
 	
 	/**
@@ -117,7 +117,7 @@ public class EmployeeEntity {
 	
 
 	@Column(nullable = false)
-	@NotEmpty
+	@NotNull
 	UUID rowGuid;
 	
 	/**
