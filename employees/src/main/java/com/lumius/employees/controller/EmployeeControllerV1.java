@@ -96,7 +96,7 @@ public class EmployeeControllerV1 {
 	@DeleteMapping(
 			value = "/{id}")
 	public ResponseEntity<Void> deleteEmployee(
-			@PathVariable UUID id) {
+			@PathVariable("id") UUID id) {
 		return service.deleteEmployeeById(id)
 				.map(opt -> 
 				ResponseEntity.noContent()

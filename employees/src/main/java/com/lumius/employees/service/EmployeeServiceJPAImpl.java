@@ -60,6 +60,7 @@ public class EmployeeServiceJPAImpl implements EmployeeService {
 		}
 	}
 
+	// Check each field of the existing, and replace it if its present in the updated
 	@Override
 	public Optional<EmployeeDto> updateEmployeeFields(UUID id, EmployeeDto newEmployee) {
 		return repository.findById(id)
@@ -67,21 +68,37 @@ public class EmployeeServiceJPAImpl implements EmployeeService {
 			.map(original -> EmployeeDto.builder()
 					// Unchanged
 					.businessEntityID(id)
-					.nationalIDNumber(nullOrEmpty(original.getNationalIDNumber() ) ? newEmployee.getNationalIDNumber() : original.getNationalIDNumber() )
-					.loginID(nullOrEmpty(original.getNationalIDNumber() ) ? newEmployee.getNationalIDNumber() : original.getNationalIDNumber() )
-					.organizationNode(nullOrEmpty(original.getOrganizationNode() ) ? newEmployee.getOrganizationNode() : original.getOrganizationNode() )
-					.organizationLevel(nullOrEmpty(original.getOrganizationLevel()) ? newEmployee.getOrganizationLevel() : original.getOrganizationLevel())
-					.jobTitle(nullOrEmpty(original.getJobTitle() ) ? newEmployee.getJobTitle() : original.getJobTitle() )
-					.birthDate(nullOrEmpty(original.getBirthDate()) ? newEmployee.getBirthDate() : original.getBirthDate() )
-					.maritalStatus(nullOrEmpty(original.getMaritalStatus()) ? newEmployee.getMaritalStatus() : original.getMaritalStatus())
-					.gender(nullOrEmpty(original.getGender()) ? newEmployee.getGender() : original.getGender() )
-					.hireDate(nullOrEmpty(original.getHireDate()) ? newEmployee.getHireDate() : original.getHireDate() )
-					.salariedFlag(nullOrEmpty(original.getSalariedFlag()) ? newEmployee.getSalariedFlag() : original.getSalariedFlag() )
-					.vacationHours(nullOrEmpty(original.getVacationHours()) ? newEmployee.getVacationHours(): original.getVacationHours() )
-					.sickLeaveHours(nullOrEmpty(original.getSickLeaveHours()) ? newEmployee.getSickLeaveHours(): original.getSickLeaveHours() )
-					.currentFlag(nullOrEmpty(original.getCurrentFlag()) ? newEmployee.getCurrentFlag() : original.getCurrentFlag() )
-					.rowGuid(nullOrEmpty(original.getRowGuid()) ? newEmployee.getRowGuid() : original.getRowGuid() )
-					.modifiedDate(nullOrEmpty(original.getModifiedDate()) ? newEmployee.getModifiedDate() : original.getModifiedDate() )
+					
+					.nationalIDNumber(nullOrEmpty(newEmployee.getNationalIDNumber() ) ? original.getNationalIDNumber() : newEmployee.getNationalIDNumber() )
+					
+					.loginID(nullOrEmpty(newEmployee.getLoginID() ) ? newEmployee.getLoginID() : original.getLoginID() )
+					
+					.organizationNode(nullOrEmpty(newEmployee.getOrganizationNode() ) ? original.getOrganizationNode() : newEmployee.getOrganizationNode() )
+					
+					.organizationLevel(nullOrEmpty(newEmployee.getOrganizationLevel() ) ? original.getOrganizationLevel() : newEmployee.getOrganizationLevel())
+					
+					.jobTitle(nullOrEmpty(newEmployee.getJobTitle() ) ? original.getJobTitle() : newEmployee.getJobTitle() )
+					
+					.birthDate(nullOrEmpty(newEmployee.getBirthDate() ) ? original.getBirthDate() : newEmployee.getBirthDate() )
+					
+					.maritalStatus(nullOrEmpty(newEmployee.getMaritalStatus() ) ? original.getMaritalStatus() : newEmployee.getMaritalStatus())
+					
+					.gender(nullOrEmpty(newEmployee.getGender() ) ? original.getGender() : newEmployee.getGender() )
+					
+					.hireDate(nullOrEmpty(newEmployee.getHireDate() ) ? original.getHireDate() : newEmployee.getHireDate() )
+					
+					.salariedFlag(nullOrEmpty(newEmployee.getSalariedFlag() ) ? original.getSalariedFlag() : newEmployee.getSalariedFlag() )
+					
+					.vacationHours(nullOrEmpty(newEmployee.getVacationHours() ) ? original.getVacationHours(): newEmployee.getVacationHours() )
+					
+					.sickLeaveHours(nullOrEmpty(newEmployee.getSickLeaveHours() ) ? original.getSickLeaveHours(): newEmployee.getSickLeaveHours() )
+					
+					.currentFlag(nullOrEmpty(newEmployee.getCurrentFlag() ) ? original.getCurrentFlag() : newEmployee.getCurrentFlag() )
+					
+					.rowGuid(nullOrEmpty(newEmployee.getRowGuid() ) ? original.getRowGuid() : newEmployee.getRowGuid() )
+					
+					.modifiedDate(nullOrEmpty(newEmployee.getModifiedDate() ) ? original.getModifiedDate() : newEmployee.getModifiedDate() )
+					
 					.build())
 			.map(EmployeeConverter::toEntity)
 			.map(repository::save)
