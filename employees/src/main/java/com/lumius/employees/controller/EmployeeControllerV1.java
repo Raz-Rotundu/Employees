@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lumius.employees.dto.EmployeeDto;
@@ -60,9 +62,11 @@ public class EmployeeControllerV1 {
 	
 	@GetMapping(
 			produces = "application/json")
-	public ResponseEntity<List<EmployeeDto>> getAllEmployees() {
+	public ResponseEntity<Page<EmployeeDto>> getAllEmployees(
+			@RequestParam(name = "pageNum", defaultValue = "1") int pageNum,
+			@RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {
 		return ResponseEntity.status(HttpStatus.OK)
-				.body(service.getAllEmployees());
+				.body(service.getAllEmployees(pageNum, pageSize));
 	}
 	
 	// Update

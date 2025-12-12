@@ -6,6 +6,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Service;
 
 import com.lumius.employees.dto.EmployeeDto;
@@ -41,11 +44,13 @@ public class EmployeeServiceJPAImpl implements EmployeeService {
 
 	
 	@Override
-	public List<EmployeeDto> getAllEmployees() {
-		return repository.findAll()
+	public Page<EmployeeDto> getAllEmployees(int pageNum, int pageSize) {
+		PageRequest page = PageRequest.of(pageNum, pageSize);
+		
+		return PageableExecutionUtils.getPage(repository.findAll()
 				.stream()
 				.map(EmployeeConverter::toDTO)
-				.toList();
+				.toList(), page, repository::count);
 	}
 
 	@Override

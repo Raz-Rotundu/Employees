@@ -89,8 +89,10 @@ public class EmployeeControllerV1Test {
 				get("/api/v1/employees")
 				.contentType("application/json"))
 		.andExpect(status().isOk())
-		.andExpect(jsonPath("$[0].loginID")
-				.value("rrotundu"));
+		.andExpect(jsonPath("$.pageable.pageNumber")
+				.value(1))
+		.andExpect(jsonPath("$.pageable.pageSize")
+				.value(10));
 		
 	}
 	

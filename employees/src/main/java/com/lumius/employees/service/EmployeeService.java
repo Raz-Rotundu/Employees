@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.springframework.data.domain.Page;
+
 import com.lumius.employees.dto.EmployeeDto;
 
 /**
@@ -33,7 +35,7 @@ public interface EmployeeService {
 	 * Retrieves all employees present in the repository
 	 * @return A list of all present Employees in the repository
 	 */
-	List<EmployeeDto> getAllEmployees();
+	Page<EmployeeDto> getAllEmployees(int pageNum, int pageSize);
 	
 	// Update
 	/**
