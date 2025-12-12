@@ -1,5 +1,6 @@
 package com.lumius.employees.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -69,23 +70,26 @@ public class EmployeeServiceJPAImpl implements EmployeeService {
 					// Unchanged
 					.businessEntityID(id)
 					
-					.nationalIDNumber(nullOrEmpty(newEmployee.getNationalIDNumber() ) ? original.getNationalIDNumber() : newEmployee.getNationalIDNumber() )
+					.nationalIDNumber(compareNewToOld(newEmployee.getNationalIDNumber(), original.getNationalIDNumber()))
 					
-					.loginID(nullOrEmpty(newEmployee.getLoginID() ) ? original.getLoginID() : newEmployee.getLoginID() )
+					.loginID(compareNewToOld(newEmployee.getLoginID(), original.getLoginID()))
 					
-					.organizationNode(nullOrEmpty(newEmployee.getOrganizationNode() ) ? original.getOrganizationNode() : newEmployee.getOrganizationNode() )
-					.organizationLevel(nullOrEmpty(newEmployee.getOrganizationLevel() ) ? original.getOrganizationLevel() : newEmployee.getOrganizationLevel())
-					.jobTitle(nullOrEmpty(newEmployee.getJobTitle() ) ? original.getJobTitle() : newEmployee.getJobTitle() )
-					.birthDate(nullOrEmpty(newEmployee.getBirthDate() ) ? original.getBirthDate() : newEmployee.getBirthDate() )
-					.maritalStatus(nullOrEmpty(newEmployee.getMaritalStatus() ) ? original.getMaritalStatus() : newEmployee.getMaritalStatus())
-					.gender(nullOrEmpty(newEmployee.getGender() ) ? original.getGender() : newEmployee.getGender() )
-					.hireDate(nullOrEmpty(newEmployee.getHireDate() ) ? original.getHireDate() : newEmployee.getHireDate() )
-					.salariedFlag(nullOrEmpty(newEmployee.getSalariedFlag() ) ? original.getSalariedFlag() : newEmployee.getSalariedFlag() )
-					.vacationHours(nullOrEmpty(newEmployee.getVacationHours() ) ? original.getVacationHours(): newEmployee.getVacationHours() )
-					.sickLeaveHours(nullOrEmpty(newEmployee.getSickLeaveHours() ) ? original.getSickLeaveHours(): newEmployee.getSickLeaveHours() )
-					.currentFlag(nullOrEmpty(newEmployee.getCurrentFlag() ) ? original.getCurrentFlag() : newEmployee.getCurrentFlag() )
-					.rowGuid(nullOrEmpty(newEmployee.getRowGuid() ) ? original.getRowGuid() : newEmployee.getRowGuid() )
-					.modifiedDate(nullOrEmpty(newEmployee.getModifiedDate() ) ? original.getModifiedDate() : newEmployee.getModifiedDate() )
+					.organizationNode(compareNewToOld(newEmployee.getOrganizationNode(), original.getOrganizationNode()))
+					.organizationLevel(compareNewToOld(newEmployee.getOrganizationLevel(), original.getOrganizationLevel()))
+					.jobTitle(compareNewToOld(newEmployee.getJobTitle(), original.getJobTitle()))
+					.birthDate(compareNewToOld(newEmployee.getBirthDate(), original.getBirthDate()))
+					.maritalStatus(compareNewToOld(newEmployee.getMaritalStatus(), original.getMaritalStatus()))
+					.gender(compareNewToOld(newEmployee.getGender(), original.getGender()))
+					.hireDate(compareNewToOld(newEmployee.getHireDate(), original.getHireDate()))
+					.salariedFlag(compareNewToOld(newEmployee.getSalariedFlag(), original.getSalariedFlag()))
+					.vacationHours(compareNewToOld(newEmployee.getVacationHours(), original.getVacationHours()))
+					.sickLeaveHours(compareNewToOld(newEmployee.getSickLeaveHours(), original.getSickLeaveHours()))
+					
+					.currentFlag(compareNewToOld(newEmployee.getCurrentFlag(), original.getCurrentFlag()))
+					.rowGuid(compareNewToOld(newEmployee.getRowGuid(), original.getRowGuid()))
+					
+					// Modified date set to current
+					.modifiedDate(LocalDateTime.now())
 					
 					.build())
 			.map(EmployeeConverter::toEntity)
@@ -102,7 +106,12 @@ public class EmployeeServiceJPAImpl implements EmployeeService {
 		repository.deleteById(id);
 		return employeeOptional;
 	}
-
+	
+	// Comparison helper
+	private <T> T compareNewToOld(T newValue, T oldValue) {
+		return nullOrEmpty(newValue)? oldValue : newValue;
+	}
+	
 	/**
 	 * A helper function to updateEmployeeFields
 	 * Determines if a given object is null or empty
