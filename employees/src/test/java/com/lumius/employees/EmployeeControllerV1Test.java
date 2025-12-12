@@ -6,17 +6,23 @@ import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import org.springframework.web.context.WebApplicationContext;
 
 import com.lumius.employees.dto.EmployeeDto;
+import com.lumius.employees.service.EmployeeService;
 
 import tools.jackson.databind.ObjectMapper;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -30,19 +36,22 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class EmployeeControllerV1Test {
 	
 	// Injected
-	WebApplicationContext context;
-	ObjectMapper mapper;
+	private final WebApplicationContext context;
+	private final ObjectMapper mapper;
 	
 	// Initialized later
-	MockMvc mockMvc;
-	EmployeeDto dto;
+	private MockMvc mockMvc;
+	private EmployeeDto dto;
+	
+	@MockitoBean
+	private EmployeeService employeeServiceMock;
 	
 	@Autowired
 	public EmployeeControllerV1Test(
 			WebApplicationContext context,
 			ObjectMapper mapper) {
 		this.context = context;
-		this.mapper = mapper;	
+		this.mapper = mapper;
 	}
 	
 	// Reset DTO and mockMVC state
@@ -60,6 +69,28 @@ public class EmployeeControllerV1Test {
 		
 	}
 	
+	
+	
+	// Testing ControllerAdvice
+	@Test
+	public void testControllerAdvice() throws Exception{
+		Mockito.when(employeeServiceMock.getEmployeeByID(any()))
+				.thenThrow(new RuntimeException("Mockito'ed a  500 error"));
+		
+		// MockMVC test
+		mockMvc.perform(
+				get("api/v1/employees/{id}", dto.getBusinessEntityID())
+				.contentType("application/json"))
+		.andExpect(status().is5xxServerError())
+		.andExpect(jsonPath("$.title")
+				.value("An Internal Error has Occurred!"));
+		
+		
+		Mockito.verify(employeeServiceMock,
+				times(1)).getEmployeeByID(any());
+		
+	}
+
 	
 	// Posts the dto and tests the POST function all in one
 	@Test
