@@ -71,32 +71,20 @@ public class EmployeeServiceJPAImpl implements EmployeeService {
 					
 					.nationalIDNumber(nullOrEmpty(newEmployee.getNationalIDNumber() ) ? original.getNationalIDNumber() : newEmployee.getNationalIDNumber() )
 					
-					.loginID(nullOrEmpty(newEmployee.getLoginID() ) ? newEmployee.getLoginID() : original.getLoginID() )
+					.loginID(nullOrEmpty(newEmployee.getLoginID() ) ? original.getLoginID() : newEmployee.getLoginID() )
 					
 					.organizationNode(nullOrEmpty(newEmployee.getOrganizationNode() ) ? original.getOrganizationNode() : newEmployee.getOrganizationNode() )
-					
 					.organizationLevel(nullOrEmpty(newEmployee.getOrganizationLevel() ) ? original.getOrganizationLevel() : newEmployee.getOrganizationLevel())
-					
 					.jobTitle(nullOrEmpty(newEmployee.getJobTitle() ) ? original.getJobTitle() : newEmployee.getJobTitle() )
-					
 					.birthDate(nullOrEmpty(newEmployee.getBirthDate() ) ? original.getBirthDate() : newEmployee.getBirthDate() )
-					
 					.maritalStatus(nullOrEmpty(newEmployee.getMaritalStatus() ) ? original.getMaritalStatus() : newEmployee.getMaritalStatus())
-					
 					.gender(nullOrEmpty(newEmployee.getGender() ) ? original.getGender() : newEmployee.getGender() )
-					
 					.hireDate(nullOrEmpty(newEmployee.getHireDate() ) ? original.getHireDate() : newEmployee.getHireDate() )
-					
 					.salariedFlag(nullOrEmpty(newEmployee.getSalariedFlag() ) ? original.getSalariedFlag() : newEmployee.getSalariedFlag() )
-					
 					.vacationHours(nullOrEmpty(newEmployee.getVacationHours() ) ? original.getVacationHours(): newEmployee.getVacationHours() )
-					
 					.sickLeaveHours(nullOrEmpty(newEmployee.getSickLeaveHours() ) ? original.getSickLeaveHours(): newEmployee.getSickLeaveHours() )
-					
 					.currentFlag(nullOrEmpty(newEmployee.getCurrentFlag() ) ? original.getCurrentFlag() : newEmployee.getCurrentFlag() )
-					
 					.rowGuid(nullOrEmpty(newEmployee.getRowGuid() ) ? original.getRowGuid() : newEmployee.getRowGuid() )
-					
 					.modifiedDate(nullOrEmpty(newEmployee.getModifiedDate() ) ? original.getModifiedDate() : newEmployee.getModifiedDate() )
 					
 					.build())

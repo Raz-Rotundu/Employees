@@ -135,10 +135,10 @@ public class EmployeeControllerV1Test {
 				.contentType("application/json"))
 		.andExpect(status().isNoContent());
 		
-//		mockMvc.perform(
-//				get("/api/v1/employees/{id}", dto.getBusinessEntityID())
-//				.contentType("application/json"))
-//		.andExpect(status().isNotFound());
+		mockMvc.perform(
+				get("/api/v1/employees/{id}", dto.getBusinessEntityID())
+				.contentType("application/json"))
+		.andExpect(status().isNotFound());
 
 	}
 	
