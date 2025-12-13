@@ -33,7 +33,7 @@ public interface EmployeeService {
 	
 	/**
 	 * Retrieves all employees present in the repository
-	 * @return A list of all present Employees in the repository
+	 * @return A page of all present Employees in the repository
 	 */
 	Page<EmployeeDto> getAllEmployees(int pageNum, int pageSize);
 	
