@@ -11,6 +11,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -22,6 +23,7 @@ import com.lumius.employees.service.EmployeeService;
 import tools.jackson.databind.ObjectMapper;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -43,7 +45,7 @@ public class EmployeeControllerV1Test {
 	private MockMvc mockMvc;
 	private EmployeeDto dto;
 	
-	@MockitoBean
+	@MockitoSpyBean
 	private EmployeeService employeeServiceMock;
 	
 	@Autowired
@@ -74,17 +76,18 @@ public class EmployeeControllerV1Test {
 	// Testing ControllerAdvice
 	@Test
 	public void testControllerAdvice() throws Exception{
-		Mockito.when(employeeServiceMock.getEmployeeByID(any()))
-				.thenThrow(new RuntimeException("Mockito'ed a  500 error"));
+		doThrow(new RuntimeException("Mockito'ed a  500 error"))
+		.when(employeeServiceMock)
+		.getEmployeeByID(any());
+		
 		
 		// MockMVC test
 		mockMvc.perform(
-				get("api/v1/employees/{id}", dto.getBusinessEntityID())
+				get("/api/v1/employees/{id}", dto.getBusinessEntityID())
 				.contentType("application/json"))
 		.andExpect(status().is5xxServerError())
 		.andExpect(jsonPath("$.title")
 				.value("An Internal Error has Occurred!"));
-		
 		
 		Mockito.verify(employeeServiceMock,
 				times(1)).getEmployeeByID(any());

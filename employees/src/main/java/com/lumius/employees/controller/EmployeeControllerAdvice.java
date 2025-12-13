@@ -20,9 +20,9 @@ public class EmployeeControllerAdvice {
 	@ExceptionHandler(RuntimeException.class)
 	public ResponseEntity<ProblemDetail> handleRuntimeException(RuntimeException ex) {
 		ProblemDetail pd = ProblemDetail.forStatus(HttpStatus.INTERNAL_SERVER_ERROR);
-		pd.setTitle("An Internal Error has Occured!");
+		pd.setTitle("An Internal Error has Occurred!");
 		
-		pd.setDetail("The following error has occured: "
+		pd.setDetail("The following error has occurred: "
 				+ ex.getMessage());
 		
 		pd.setInstance(URI.create("/api/v1/employees"));
