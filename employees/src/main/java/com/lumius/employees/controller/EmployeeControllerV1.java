@@ -33,7 +33,7 @@ public class EmployeeControllerV1 {
 	EmployeeService service;
 	
 	public EmployeeControllerV1(
-			@Qualifier("JPAImpl") EmployeeService service) {
+			@Qualifier("JdbcImpl") EmployeeService service) {
 				this.service = service;
 			}
 	
@@ -68,45 +68,45 @@ public class EmployeeControllerV1 {
 		return ResponseEntity.status(HttpStatus.OK)
 				.body(service.getAllEmployees(pageNum, pageSize));
 	}
-	
-	// Update
-	@PutMapping(
-			value = "/{id}",
-			consumes = "application/json",
-			produces = "application/json")
-	public ResponseEntity<EmployeeDto> updateEmployee(
-			@PathVariable("id") UUID id,
-			@RequestBody @Valid EmployeeDto updatedEmployee) {
-		return service.updateEmployee(id, updatedEmployee)
-				.map(ResponseEntity::ok)
-				.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND)
-						.body(null));
-	}
-	
-	@PatchMapping(
-			value = "/{id}",
-			consumes = "application/json",
-			produces = "application/json")
-	public ResponseEntity<EmployeeDto> updateEmployeeFields(
-			@PathVariable("id") UUID id,
-			@RequestBody EmployeeDto newEmployee) {
-		return service.updateEmployeeFields(id, newEmployee)
-				.map(ResponseEntity::ok)
-				.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND)
-						.body(null));
-	}
-	
-	// Delete
-	@DeleteMapping(
-			value = "/{id}")
-	public ResponseEntity<Void> deleteEmployee(
-			@PathVariable("id") UUID id) {
-		return service.deleteEmployeeById(id)
-				.map(opt -> 
-				ResponseEntity.noContent()
-					.<Void>build())
-				.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND)
-						.body(null));
-	}
-	
+//	
+//	// Update
+//	@PutMapping(
+//			value = "/{id}",
+//			consumes = "application/json",
+//			produces = "application/json")
+//	public ResponseEntity<EmployeeDto> updateEmployee(
+//			@PathVariable("id") UUID id,
+//			@RequestBody @Valid EmployeeDto updatedEmployee) {
+//		return service.updateEmployee(id, updatedEmployee)
+//				.map(ResponseEntity::ok)
+//				.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND)
+//						.body(null));
+//	}
+//	
+//	@PatchMapping(
+//			value = "/{id}",
+//			consumes = "application/json",
+//			produces = "application/json")
+//	public ResponseEntity<EmployeeDto> updateEmployeeFields(
+//			@PathVariable("id") UUID id,
+//			@RequestBody EmployeeDto newEmployee) {
+//		return service.updateEmployeeFields(id, newEmployee)
+//				.map(ResponseEntity::ok)
+//				.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND)
+//						.body(null));
+//	}
+//	
+//	// Delete
+//	@DeleteMapping(
+//			value = "/{id}")
+//	public ResponseEntity<Void> deleteEmployee(
+//			@PathVariable("id") UUID id) {
+//		return service.deleteEmployeeById(id)
+//				.map(opt -> 
+//				ResponseEntity.noContent()
+//					.<Void>build())
+//				.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND)
+//						.body(null));
+//	}
+//	
 }

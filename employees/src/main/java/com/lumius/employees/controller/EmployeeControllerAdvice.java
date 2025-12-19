@@ -14,22 +14,22 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
  * A basic exception handler that returns detailed responses when 500 errors occur in application
  */
 
-@RestControllerAdvice
-public class EmployeeControllerAdvice {
-	
-	@ExceptionHandler(RuntimeException.class)
-	public ResponseEntity<ProblemDetail> handleRuntimeException(RuntimeException ex) {
-		ProblemDetail pd = ProblemDetail.forStatus(HttpStatus.INTERNAL_SERVER_ERROR);
-		pd.setTitle("An Internal Error has Occurred!");
-		
-		pd.setDetail("The following error has occurred: "
-				+ ex.getMessage());
-		
-		pd.setInstance(URI.create("/api/v1/employees"));
-		pd.setProperty("timestamp",
-				LocalDateTime.now().toString());
-		
-		return new ResponseEntity<> (pd, HttpStatus.INTERNAL_SERVER_ERROR);
-	}
-
-}
+//@RestControllerAdvice
+//public class EmployeeControllerAdvice {
+//	
+//	@ExceptionHandler(RuntimeException.class)
+//	public ResponseEntity<ProblemDetail> handleRuntimeException(RuntimeException ex) {
+//		ProblemDetail pd = ProblemDetail.forStatus(HttpStatus.INTERNAL_SERVER_ERROR);
+//		pd.setTitle("An Internal Error has Occurred!");
+//		
+//		pd.setDetail("The following error has occurred: "
+//				+ ex.getMessage());
+//		
+//		pd.setInstance(URI.create("/api/v1/employees"));
+//		pd.setProperty("timestamp",
+//				LocalDateTime.now().toString());
+//		
+//		return new ResponseEntity<> (pd, HttpStatus.INTERNAL_SERVER_ERROR);
+//	}
+//
+//}

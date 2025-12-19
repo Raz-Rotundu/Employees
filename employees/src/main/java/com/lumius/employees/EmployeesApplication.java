@@ -12,6 +12,7 @@ public class EmployeesApplication {
 	public static void main(String[] args) {
 		SpringApplication app = new SpringApplication(EmployeesApplication.class);
 		
+//		configureH2(app);
 		
 		app.run(args);
 	}
