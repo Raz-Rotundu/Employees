@@ -21,40 +21,40 @@ public class EmployeeRowMapper implements RowMapper<EmployeeDto> {
 	public EmployeeDto mapRow(ResultSet rs, int rowNum) throws SQLException {
 		
 		return EmployeeDto.builder()
-				.businessEntityID(UUID.fromString(rs.getString("businessEntityID")))
+				.businessEntityID(UUID.fromString(rs.getString("business_entityid")))
 				
-				.nationalIDNumber(rs.getString("nationalIDNumber"))
-				.loginID(rs.getString("loginID"))
+				.nationalIDNumber(rs.getString("nationalidNumber"))
+				.loginID(rs.getString("loginid"))
 				
-				.organizationNode(rs.getString("organizationNode"))
-				.organizationLevel(rs.getString("organizationLevel"))
+				.organizationNode(rs.getString("organization_node"))
+				.organizationLevel(rs.getString("organization_level"))
 				
-				.jobTitle(rs.getString("jobTitle"))
+				.jobTitle(rs.getString("job_title"))
 				
 
-				.birthDate(rs.getTimestamp("birthDate")
+				.birthDate(rs.getTimestamp("birth_date")
 						.toLocalDateTime()
 						.toLocalDate())
 				
-				.maritalStatus(rs.getString("maritalStatus"))
+				.maritalStatus(rs.getString("marital_status"))
 				
 				.gender(rs.getString("gender"))
 				
 
-				.hireDate(rs.getTimestamp("hireDate")
+				.hireDate(rs.getTimestamp("hire_date")
 						.toLocalDateTime()
 						.toLocalDate())
 				
-				.salariedFlag(rs.getString("salariedFlag"))
+				.salariedFlag(rs.getString("salaried_flag"))
 				
-				.vacationHours(rs.getInt("vacationHours"))
-				.sickLeaveHours(rs.getInt("vacationHours"))
+				.vacationHours(rs.getInt("vacation_hours"))
+				.sickLeaveHours(rs.getInt("vacation_hours"))
 				
-				.currentFlag(rs.getString("currentFlag"))
-				.rowGuid(UUID.fromString(rs.getString("rowGuid")))
+				.currentFlag(rs.getString("current_flag"))
+				.rowGuid(UUID.fromString(rs.getString("row_guid")))
 				
 
-				.modifiedDate(rs.getTimestamp("modifiedDate")
+				.modifiedDate(rs.getTimestamp("modified_date")
 						.toLocalDateTime())
 				
 				.build();

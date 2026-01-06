@@ -46,23 +46,30 @@ public class EmployeeServiceJDBCImpl implements EmployeeService {
 	@Override
 	public Optional<EmployeeDto> getEmployeeByID(UUID id) {
 		StringBuilder query = new StringBuilder();
+		MapSqlParameterSource params = new MapSqlParameterSource();
 		
 		
-		query.append("SELECT * FROM " + TABLE_NAME + " ");
-		query.append("WHERE businessEntityID EQUALS " + id +";");
+		//test
+//		query.append("SELECT * FROM employees_table WHERE business_entityid = 'c499a115-b05d-417c-83c1-c996e7d656bf';");
 		
+		query.append("SELECT * FROM " + TABLE_NAME + 
+				" WHERE business_entityid = :id;");
+		
+		params.addValue("id", id);
+
 		return Optional.ofNullable(
-				template.query(query.toString(), rowMapper)
-				.get(1));
+				template.query(query.toString(), params,  rowMapper)
+				.get(0));
 	}
 
 	@Override
 	public Page<EmployeeDto> getAllEmployees(int pageNum, int pageSize) {
 		PageRequest page = PageRequest.of(pageNum, pageSize);
 		StringBuilder query = new StringBuilder();
+		query.append("SELECT * FROM " + TABLE_NAME + ";");
 		
 		return PageableExecutionUtils.getPage(
-				template.query(query.toString(), rowMapper), page, null);
+				template.query(query.toString(), rowMapper), page, () -> getTableSize());
 	}
 
 	@Override
@@ -79,10 +86,25 @@ public class EmployeeServiceJDBCImpl implements EmployeeService {
 
 	@Override
 	public Optional<EmployeeDto> deleteEmployeeById(UUID id) {
+		StringBuilder queryString = new StringBuilder();
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		
+		
 		// TODO Auto-generated method stub
 		return Optional.empty();
 	}
 
+	// Helper function to get the size of the named table
+	private Long getTableSize() {
+		StringBuilder query = new StringBuilder();
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		
+		query.append("SELECT * FROM :tableName;");
+		params.addValue("tableName", TABLE_NAME);
+		
+		
+		return Long.valueOf(template.update(query.toString(), params));
+	}
 	
 	// Helper function to set up an INSERT with all the DTO column names
 	private void writeDtoQuery(StringBuilder query) {
@@ -99,6 +121,7 @@ public class EmployeeServiceJDBCImpl implements EmployeeService {
 				+ ":salariedFlag, :vacationHours, :sickLeaveHours, :currentFlag, :rowGuid, :modifiedDate);");
 		
 	}
+	
 	// Helper function to quickly load up the DTO field names as parameter names
 	private void loadDtoParams(MapSqlParameterSource param, EmployeeDto dto) {
 		param.addValue("businessEntityID", dto.getBusinessEntityID());
