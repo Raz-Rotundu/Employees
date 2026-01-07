@@ -48,10 +48,6 @@ public class EmployeeServiceJDBCImpl implements EmployeeService {
 		StringBuilder query = new StringBuilder();
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		
-		
-		//test
-//		query.append("SELECT * FROM employees_table WHERE business_entityid = 'c499a115-b05d-417c-83c1-c996e7d656bf';");
-		
 		query.append("SELECT * FROM " + TABLE_NAME + 
 				" WHERE business_entityid = :id;");
 		
@@ -89,9 +85,13 @@ public class EmployeeServiceJDBCImpl implements EmployeeService {
 		StringBuilder queryString = new StringBuilder();
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		
+		Optional<EmployeeDto> employee = getEmployeeByID(id);
 		
-		// TODO Auto-generated method stub
-		return Optional.empty();
+		queryString.append("DELETE FROM employees_table WHERE business_entityid = :id;");
+		params.addValue("id", id);
+		
+		template.update(queryString.toString(), params);
+		return employee;
 	}
 
 	// Helper function to get the size of the named table
@@ -99,11 +99,10 @@ public class EmployeeServiceJDBCImpl implements EmployeeService {
 		StringBuilder query = new StringBuilder();
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		
-		query.append("SELECT * FROM :tableName;");
-		params.addValue("tableName", TABLE_NAME);
+		query.append("SELECT COUNT(*) FROM " + TABLE_NAME + ";");
 		
-		
-		return Long.valueOf(template.update(query.toString(), params));
+		return Long.valueOf(
+				template.queryForObject(query.toString(), params, Long.class));
 	}
 	
 	// Helper function to set up an INSERT with all the DTO column names

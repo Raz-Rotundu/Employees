@@ -95,18 +95,18 @@ public class EmployeeControllerV1 {
 //				.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND)
 //						.body(null));
 //	}
-//	
-//	// Delete
-//	@DeleteMapping(
-//			value = "/{id}")
-//	public ResponseEntity<Void> deleteEmployee(
-//			@PathVariable("id") UUID id) {
-//		return service.deleteEmployeeById(id)
-//				.map(opt -> 
-//				ResponseEntity.noContent()
-//					.<Void>build())
-//				.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND)
-//						.body(null));
-//	}
-//	
+
+	// Delete
+	@DeleteMapping(
+			value = "/{id}")
+	public ResponseEntity<Void> deleteEmployee(
+			@PathVariable("id") UUID id) {
+		return service.deleteEmployeeById(id)
+				.map(opt -> 
+				ResponseEntity.noContent()
+					.<Void>build())
+				.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND)
+						.body(null));
+	}
+	
 }
