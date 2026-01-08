@@ -132,7 +132,8 @@ public class EmployeeServiceJDBCImpl implements EmployeeService {
 		
 		Optional<EmployeeDto> employee = getEmployeeByID(id);
 		
-		queryString.append("DELETE FROM employees_table WHERE business_entityid = :id;");
+		queryString.append("DELETE FROM " + TABLE_NAME + " "
+				+ "WHERE business_entityid = :id;");
 		params.addValue("id", id);
 		
 		template.update(queryString.toString(), params);
