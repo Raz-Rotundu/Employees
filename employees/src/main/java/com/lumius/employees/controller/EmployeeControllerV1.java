@@ -82,19 +82,19 @@ public class EmployeeControllerV1 {
 				.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND)
 						.body(null));
 	}
-//	
-//	@PatchMapping(
-//			value = "/{id}",
-//			consumes = "application/json",
-//			produces = "application/json")
-//	public ResponseEntity<EmployeeDto> updateEmployeeFields(
-//			@PathVariable("id") UUID id,
-//			@RequestBody EmployeeDto newEmployee) {
-//		return service.updateEmployeeFields(id, newEmployee)
-//				.map(ResponseEntity::ok)
-//				.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND)
-//						.body(null));
-//	}
+	
+	@PatchMapping(
+			value = "/{id}",
+			consumes = "application/json",
+			produces = "application/json")
+	public ResponseEntity<EmployeeDto> updateEmployeeFields(
+			@PathVariable("id") UUID id,
+			@RequestBody EmployeeDto newEmployee) {
+		return service.updateEmployeeFields(id, newEmployee)
+				.map(ResponseEntity::ok)
+				.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND)
+						.body(null));
+	}
 
 	// Delete
 	@DeleteMapping(

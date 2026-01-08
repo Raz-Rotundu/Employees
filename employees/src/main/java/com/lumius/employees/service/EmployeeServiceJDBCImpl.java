@@ -97,8 +97,32 @@ public class EmployeeServiceJDBCImpl implements EmployeeService {
 
 	@Override
 	public Optional<EmployeeDto> updateEmployeeFields(UUID id, EmployeeDto partialEmployee) {
-		// TODO Auto-generated method stub
-		return Optional.empty();
+		StringBuilder queryBuilder = new StringBuilder();
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		
+		if (existsById(id)) {
+			EmployeeDto originalEmployee = getEmployeeByID(id).get();
+			
+			// Build new DTO
+			EmployeeDto updatedEmployee = updateDto(partialEmployee, originalEmployee);
+			
+			// Save new DTO
+			writeUpdateQuery(queryBuilder);
+			
+			//Load params
+			loadUpdateParams(params, updatedEmployee);
+			
+			//Run query
+			template.update(queryBuilder.toString(), params);
+			
+			return Optional.of(updatedEmployee);
+			
+			
+			
+		} else {
+			return Optional.empty();
+		}
+
 	}
 
 	@Override
@@ -220,5 +244,52 @@ public class EmployeeServiceJDBCImpl implements EmployeeService {
 				.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSS"))
 				.toString());
 	
+	}
+	
+	
+	// Helper to build a new DTO
+	private EmployeeDto updateDto(EmployeeDto newEmployee, EmployeeDto original) {
+		return EmployeeDto.builder()
+		// Unchanged
+		.businessEntityID(original.getBusinessEntityID())
+		
+		.nationalIDNumber(compareNewToOld(newEmployee.getNationalIDNumber(), original.getNationalIDNumber()))
+		
+		.loginID(compareNewToOld(newEmployee.getLoginID(), original.getLoginID()))
+		
+		.organizationNode(compareNewToOld(newEmployee.getOrganizationNode(), original.getOrganizationNode()))
+		.organizationLevel(compareNewToOld(newEmployee.getOrganizationLevel(), original.getOrganizationLevel()))
+		.jobTitle(compareNewToOld(newEmployee.getJobTitle(), original.getJobTitle()))
+		.birthDate(compareNewToOld(newEmployee.getBirthDate(), original.getBirthDate()))
+		.maritalStatus(compareNewToOld(newEmployee.getMaritalStatus(), original.getMaritalStatus()))
+		.gender(compareNewToOld(newEmployee.getGender(), original.getGender()))
+		.hireDate(compareNewToOld(newEmployee.getHireDate(), original.getHireDate()))
+		.salariedFlag(compareNewToOld(newEmployee.getSalariedFlag(), original.getSalariedFlag()))
+		.vacationHours(compareNewToOld(newEmployee.getVacationHours(), original.getVacationHours()))
+		.sickLeaveHours(compareNewToOld(newEmployee.getSickLeaveHours(), original.getSickLeaveHours()))
+		
+		.currentFlag(compareNewToOld(newEmployee.getCurrentFlag(), original.getCurrentFlag()))
+		.rowGuid(compareNewToOld(newEmployee.getRowGuid(), original.getRowGuid()))
+		
+		// Modified date set to current
+		.modifiedDate(LocalDateTime.now())
+		
+		.build();
+	}
+	// Comparison helper
+	private <T> T compareNewToOld(T newValue, T oldValue) {
+		return nullOrEmpty(newValue)? oldValue : newValue;
+	}
+	
+	/**
+	 * A helper function to updateEmployeeFields
+	 * Determines if a given object is null or empty
+	 * @param address a potentially empty or null object
+	 * @return true or false if an object is null or empty
+	 */
+	private boolean nullOrEmpty(Object address) {
+		if(address == null) return true;
+		if(address instanceof String) return ((String)address).isEmpty();
+		return false;
 	}
 }
