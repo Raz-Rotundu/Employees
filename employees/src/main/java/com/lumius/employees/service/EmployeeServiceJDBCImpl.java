@@ -37,7 +37,7 @@ public class EmployeeServiceJDBCImpl implements EmployeeService {
 		StringBuilder query = new StringBuilder();
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		
-		writeDtoQuery(query);	
+		writeDtoQuery(query, TABLE_NAME);	
 		loadDtoParams(params, newEmployee);
 		
 		template.update(query.toString(), params);
@@ -55,7 +55,7 @@ public class EmployeeServiceJDBCImpl implements EmployeeService {
 		
 		params.addValue("id", id);
 
-		if(existsById(id)) {
+		if(existsById(id, TABLE_NAME)) {
 			return Optional.ofNullable(
 					template.queryForObject(query.toString(), params, rowMapper));
 		} else {
@@ -71,7 +71,7 @@ public class EmployeeServiceJDBCImpl implements EmployeeService {
 		query.append("SELECT * FROM " + TABLE_NAME + ";");
 		
 		return PageableExecutionUtils.getPage(
-				template.query(query.toString(), rowMapper), page, () -> getTableSize());
+				template.query(query.toString(), rowMapper), page, () -> getTableSize(TABLE_NAME));
 	}
 
 	@Override
@@ -79,9 +79,9 @@ public class EmployeeServiceJDBCImpl implements EmployeeService {
 		StringBuilder queryBuilder = new StringBuilder();
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		
-		if (existsById(id)) {
+		if (existsById(id, TABLE_NAME)) {
 			
-			writeUpdateQuery(queryBuilder);
+			writeUpdateQuery(queryBuilder, TABLE_NAME);
 			
 			
 			loadUpdateParams(params, updatedEmployee);
@@ -100,14 +100,14 @@ public class EmployeeServiceJDBCImpl implements EmployeeService {
 		StringBuilder queryBuilder = new StringBuilder();
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		
-		if (existsById(id)) {
+		if (existsById(id, TABLE_NAME)) {
 			EmployeeDto originalEmployee = getEmployeeByID(id).get();
 			
 			// Build new DTO
 			EmployeeDto updatedEmployee = updateDto(partialEmployee, originalEmployee);
 			
 			// Save new DTO
-			writeUpdateQuery(queryBuilder);
+			writeUpdateQuery(queryBuilder, TABLE_NAME);
 			
 			//Load params
 			loadUpdateParams(params, updatedEmployee);
@@ -138,13 +138,20 @@ public class EmployeeServiceJDBCImpl implements EmployeeService {
 		template.update(queryString.toString(), params);
 		return employee;
 	}
+	
+	
 
-	// Helper to check if an employee exists by id
-	private boolean existsById(UUID id) {
+	/**
+	 * Function to check if given id exists in the given table
+	 * @param id the business_entityid value to search for
+	 * @param tableName name of target table
+	 * @return true if one or more rows with the given business_entityid value exist
+	 */
+	private boolean existsById(UUID id, String tableName) {
 		StringBuilder queryBuilder = new StringBuilder();
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		
-		queryBuilder.append(String.format("SELECT COUNT(*) FROM %s ", TABLE_NAME));
+		queryBuilder.append(String.format("SELECT COUNT(*) FROM %s ", tableName));
 		queryBuilder.append("WHERE business_entityid = :id;");
 		
 		params.addValue("id", id);
@@ -157,21 +164,30 @@ public class EmployeeServiceJDBCImpl implements EmployeeService {
 			return false;
 		}
 	}
-	// Helper function to get the size of the named table
-	private Long getTableSize() {
+	
+	/**
+	 * Function to get the size of the given table, assuming it exists
+	 * @param tableName the name of target table
+	 * @return
+	 */
+	private Long getTableSize(String tableName) {
 		StringBuilder query = new StringBuilder();
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		
-		query.append("SELECT COUNT(*) FROM " + TABLE_NAME + ";");
+		query.append("SELECT COUNT(*) FROM " + tableName + ";");
 		
 		return Long.valueOf(
 				template.queryForObject(query.toString(), params, Long.class));
 	}
 	
-	// Helper function to set up the UPDATE query statement with all the db columns and DTO attributes
-	private void writeUpdateQuery(StringBuilder query) {
+	/**
+	 * Append a string representing and UPDATE query for an EmployeeDto
+	 * @param tableName the name of target table
+	 * @param query the StringBuilder containing the query
+	 */
+	private void writeUpdateQuery(StringBuilder query, String tableName) {
 		// Table
-		query.append(String.format("UPDATE %s ", TABLE_NAME));
+		query.append(String.format("UPDATE %s ", tableName));
 		
 		// Columns
 		query.append("SET ");
@@ -200,9 +216,13 @@ public class EmployeeServiceJDBCImpl implements EmployeeService {
 		query.append("WHERE business_entityid = :businessEntityID ;");
 	}
 	
-	// Helper function to set up an INSERT with all the DTO column names
-	private void writeDtoQuery(StringBuilder query) {
-		query.append("INSERT INTO " + TABLE_NAME + " ");
+	/**
+	 * Load up a stringBuilder with a string representing an INSERT of the EmployeeDto, with named parameters
+	 * @param tableName the name of the target table
+	 * @param qStringBuilder representing the query
+	 */
+	private void writeDtoQuery(StringBuilder query, String tableName) {
+		query.append("INSERT INTO " + tableName + " ");
 		query.append("(business_entityid, nationalidnumber, loginid, "
 				+ "organization_node, organization_level, "
 				+ "job_title, birth_date, marital_status, gender, hire_date, "
@@ -216,7 +236,11 @@ public class EmployeeServiceJDBCImpl implements EmployeeService {
 		
 	}
 	
-	// Helper function to quickly load up the DTO field names as parameter names
+	/**
+	 * Function to set up namedParameterJdbcTemplate parameters to the given EmployeeDto values
+	 * @param param MapSqlParameterSource containing parameters
+	 * @param dto EmployeeDto from which to get parameter values
+	 */
 	private void loadDtoParams(MapSqlParameterSource param, EmployeeDto dto) {
 		param.addValue("businessEntityID", dto.getBusinessEntityID());
 		param.addValue("nationalIDNumber", dto.getNationalIDNumber());
@@ -237,7 +261,11 @@ public class EmployeeServiceJDBCImpl implements EmployeeService {
 	
 	}
 	
-	// Helper function to quickly load up update names as parameter names and change update time
+	/**
+	 * Function to load up EmployeeDto parameter values based on given dto, but updates the modifiedDate parameter to current time
+	 * @param param the MapSqlParameterSource object
+	 * @param dto an EmployeeDto object
+	 */
 	private void loadUpdateParams(MapSqlParameterSource param, EmployeeDto dto) {
 		loadDtoParams(param, dto);
 		param.addValue("modifiedDate", LocalDateTime.now()
@@ -247,7 +275,13 @@ public class EmployeeServiceJDBCImpl implements EmployeeService {
 	}
 	
 	
-	// Helper to build a new DTO
+	/**
+	 * Helper method to construct a new EmployeeDto, using the original as base
+	 * only changing the values which are not null from newEmployee
+	 * @param newEmployee partially complete EmployeeDto
+	 * @param original base values of the EmployeeDto
+	 * @return a new EmployeeDto, containing new's values where not null, using original's values everywhere else
+	 */
 	private EmployeeDto updateDto(EmployeeDto newEmployee, EmployeeDto original) {
 		return EmployeeDto.builder()
 		// Unchanged
@@ -276,7 +310,14 @@ public class EmployeeServiceJDBCImpl implements EmployeeService {
 		
 		.build();
 	}
-	// Comparison helper
+	
+	/**
+	 * Helper method to compare two values, returning new if new is not null or empty
+	 * @param <T> The type of variable to be compared
+	 * @param newValue the new value to compare
+	 * @param oldValue the old value to compare with
+	 * @return newValue if now null or empty
+	 */
 	private <T> T compareNewToOld(T newValue, T oldValue) {
 		return nullOrEmpty(newValue)? oldValue : newValue;
 	}
