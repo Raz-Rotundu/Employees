@@ -215,22 +215,7 @@ public class EmployeeServiceJDBCImpl implements EmployeeService {
 	
 	// Helper function to quickly load up update names as parameter names and change update time
 	private void loadUpdateParams(MapSqlParameterSource param, EmployeeDto dto) {
-		param.addValue("businessEntityID", dto.getBusinessEntityID());
-		param.addValue("nationalIDNumber", dto.getNationalIDNumber());
-		param.addValue("loginID", dto.getLoginID());
-		param.addValue("organizationNode", dto.getOrganizationNode());
-		param.addValue("organizationLevel", dto.getOrganizationLevel());
-		param.addValue("jobTitle", dto.getJobTitle());
-		param.addValue("birthDate", dto.getBirthDate());
-		param.addValue("maritalStatus", dto.getMaritalStatus());
-		param.addValue("gender", dto.getGender());
-		param.addValue("hireDate", dto.getHireDate());
-		param.addValue("salariedFlag",  dto.getSalariedFlag());
-		param.addValue("vacationHours", dto.getVacationHours());
-		param.addValue("sickLeaveHours", dto.getSickLeaveHours());
-		param.addValue("currentFlag", dto.getCurrentFlag());
-		param.addValue("rowGuid", dto.getRowGuid());
-		
+		loadDtoParams(param, dto);
 		param.addValue("modifiedDate", LocalDateTime.now()
 				.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSS"))
 				.toString());
