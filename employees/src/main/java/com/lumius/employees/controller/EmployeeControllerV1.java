@@ -25,6 +25,9 @@ import com.lumius.employees.service.EmployeeService;
 
 import jakarta.validation.Valid;
 
+/**
+ * A CRUD controller for an employees database
+ */
 @RestController
 @Validated
 @RequestMapping("/api/v1/employees")
