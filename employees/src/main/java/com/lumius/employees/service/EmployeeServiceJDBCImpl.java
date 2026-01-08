@@ -1,6 +1,7 @@
 package com.lumius.employees.service;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -78,11 +79,12 @@ public class EmployeeServiceJDBCImpl implements EmployeeService {
 		StringBuilder queryBuilder = new StringBuilder();
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		
-		if (getEmployeeByID(id) != null) {
+		if (existsById(id)) {
 			
 			writeUpdateQuery(queryBuilder);
-			loadDtoParams(params, updatedEmployee);
 			
+			
+			loadUpdateParams(params, updatedEmployee);
 			template.update(queryBuilder.toString(), params);
 			
 			return getEmployeeByID(id);
@@ -168,10 +170,10 @@ public class EmployeeServiceJDBCImpl implements EmployeeService {
 		query.append("row_guid = :rowGuid, ");
 		
 		// Modified
-		query.append(String.format("modified_date = %s ", LocalDateTime.now()));
+		query.append("modified_date = :modifiedDate ");
 		
 		// Restrictions
-		query.append("WHERE business_entityid = :id ;");
+		query.append("WHERE business_entityid = :businessEntityID ;");
 	}
 	
 	// Helper function to set up an INSERT with all the DTO column names
@@ -195,7 +197,7 @@ public class EmployeeServiceJDBCImpl implements EmployeeService {
 		param.addValue("businessEntityID", dto.getBusinessEntityID());
 		param.addValue("nationalIDNumber", dto.getNationalIDNumber());
 		param.addValue("loginID", dto.getLoginID());
-		param.addValue("organizationNode", "organizationNode");
+		param.addValue("organizationNode", dto.getOrganizationNode());
 		param.addValue("organizationLevel", dto.getOrganizationLevel());
 		param.addValue("jobTitle", dto.getJobTitle());
 		param.addValue("birthDate", dto.getBirthDate());
@@ -208,6 +210,30 @@ public class EmployeeServiceJDBCImpl implements EmployeeService {
 		param.addValue("currentFlag", dto.getCurrentFlag());
 		param.addValue("rowGuid", dto.getRowGuid());
 		param.addValue("modifiedDate", dto.getModifiedDate());
+	
+	}
+	
+	// Helper function to quickly load up update names as parameter names and change update time
+	private void loadUpdateParams(MapSqlParameterSource param, EmployeeDto dto) {
+		param.addValue("businessEntityID", dto.getBusinessEntityID());
+		param.addValue("nationalIDNumber", dto.getNationalIDNumber());
+		param.addValue("loginID", dto.getLoginID());
+		param.addValue("organizationNode", dto.getOrganizationNode());
+		param.addValue("organizationLevel", dto.getOrganizationLevel());
+		param.addValue("jobTitle", dto.getJobTitle());
+		param.addValue("birthDate", dto.getBirthDate());
+		param.addValue("maritalStatus", dto.getMaritalStatus());
+		param.addValue("gender", dto.getGender());
+		param.addValue("hireDate", dto.getHireDate());
+		param.addValue("salariedFlag",  dto.getSalariedFlag());
+		param.addValue("vacationHours", dto.getVacationHours());
+		param.addValue("sickLeaveHours", dto.getSickLeaveHours());
+		param.addValue("currentFlag", dto.getCurrentFlag());
+		param.addValue("rowGuid", dto.getRowGuid());
+		
+		param.addValue("modifiedDate", LocalDateTime.now()
+				.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSS"))
+				.toString());
 	
 	}
 }
