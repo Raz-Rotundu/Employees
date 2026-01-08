@@ -1,5 +1,6 @@
 package com.lumius.employees.service;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -53,9 +54,13 @@ public class EmployeeServiceJDBCImpl implements EmployeeService {
 		
 		params.addValue("id", id);
 
-		return Optional.ofNullable(
-				template.query(query.toString(), params,  rowMapper)
-				.get(0));
+		if(existsById(id)) {
+			return Optional.ofNullable(
+					template.queryForObject(query.toString(), params, rowMapper));
+		} else {
+			return Optional.empty();
+		}
+
 	}
 
 	@Override
@@ -70,8 +75,22 @@ public class EmployeeServiceJDBCImpl implements EmployeeService {
 
 	@Override
 	public Optional<EmployeeDto> updateEmployee(UUID id, EmployeeDto updatedEmployee) {
-		// TODO Auto-generated method stub
-		return Optional.empty();
+		StringBuilder queryBuilder = new StringBuilder();
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		
+		if (getEmployeeByID(id) != null) {
+			
+			writeUpdateQuery(queryBuilder);
+			loadDtoParams(params, updatedEmployee);
+			
+			template.update(queryBuilder.toString(), params);
+			
+			return getEmployeeByID(id);
+			
+			
+		} else {
+			return Optional.empty();
+		}
 	}
 
 	@Override
@@ -94,6 +113,24 @@ public class EmployeeServiceJDBCImpl implements EmployeeService {
 		return employee;
 	}
 
+	// Helper to check if an employee exists by id
+	private boolean existsById(UUID id) {
+		StringBuilder queryBuilder = new StringBuilder();
+		MapSqlParameterSource params = new MapSqlParameterSource();
+		
+		queryBuilder.append(String.format("SELECT COUNT(*) FROM %s ", TABLE_NAME));
+		queryBuilder.append("WHERE business_entityid = :id;");
+		
+		params.addValue("id", id);
+		
+		Long result = template.queryForObject(queryBuilder.toString(), params, Long.class);
+		
+		if (result != 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 	// Helper function to get the size of the named table
 	private Long getTableSize() {
 		StringBuilder query = new StringBuilder();
@@ -103,6 +140,38 @@ public class EmployeeServiceJDBCImpl implements EmployeeService {
 		
 		return Long.valueOf(
 				template.queryForObject(query.toString(), params, Long.class));
+	}
+	
+	// Helper function to set up the UPDATE query statement with all the db columns and DTO attributes
+	private void writeUpdateQuery(StringBuilder query) {
+		// Table
+		query.append(String.format("UPDATE %s ", TABLE_NAME));
+		
+		// Columns
+		query.append("SET ");
+		
+		query.append("nationalidnumber = :nationalIDNumber, ");
+		query.append("loginid = :loginID , ");
+		query.append("organization_node = :organizationNode, ");
+		query.append("organization_level = :organizationLevel, ");
+		query.append("job_title = :jobTitle, ");
+		
+		query.append("birth_date = :birthDate, ");
+		query.append("marital_status = :maritalStatus, ");
+		query.append("gender = :gender, ");
+		query.append("hire_date = :hireDate, ");
+		query.append("salaried_flag = :salariedFlag, ");
+		
+		query.append("vacation_hours = :vacationHours, ");
+		query.append("sick_leave_hours = :sickLeaveHours, ");
+		query.append("current_flag = :currentFlag, ");
+		query.append("row_guid = :rowGuid, ");
+		
+		// Modified
+		query.append(String.format("modified_date = %s ", LocalDateTime.now()));
+		
+		// Restrictions
+		query.append("WHERE business_entityid = :id ;");
 	}
 	
 	// Helper function to set up an INSERT with all the DTO column names

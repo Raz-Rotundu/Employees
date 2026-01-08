@@ -165,21 +165,21 @@ public class EmployeeControllerV1Test {
 //		
 //	}
 //	
-//	// DELETE Test
-//	@Test
-//	public void testDeleteEmployee() throws Exception {
-//		mockMvc.perform(
-//				delete("/api/v1/employees/{id}", dto.getBusinessEntityID())
-//				.contentType("application/json"))
-//		.andExpect(status().isNoContent());
-//		
-//		mockMvc.perform(
-//				get("/api/v1/employees/{id}", dto.getBusinessEntityID())
-//				.contentType("application/json"))
-//		.andExpect(status().isNotFound());
-//
-//	}
-//	
+	// DELETE Test
+	@Test
+	public void testDeleteEmployee() throws Exception {
+		mockMvc.perform(
+				delete("/api/v1/employees/{id}", dto.getBusinessEntityID())
+				.contentType("application/json"))
+		.andExpect(status().isNoContent());
+		
+		mockMvc.perform(
+				get("/api/v1/employees/{id}", dto.getBusinessEntityID())
+				.contentType("application/json"))
+		.andExpect(status().isNotFound());
+
+	}
+	
 	
 	
 	

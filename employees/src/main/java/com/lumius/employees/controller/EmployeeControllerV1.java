@@ -68,20 +68,20 @@ public class EmployeeControllerV1 {
 		return ResponseEntity.status(HttpStatus.OK)
 				.body(service.getAllEmployees(pageNum, pageSize));
 	}
-//	
-//	// Update
-//	@PutMapping(
-//			value = "/{id}",
-//			consumes = "application/json",
-//			produces = "application/json")
-//	public ResponseEntity<EmployeeDto> updateEmployee(
-//			@PathVariable("id") UUID id,
-//			@RequestBody @Valid EmployeeDto updatedEmployee) {
-//		return service.updateEmployee(id, updatedEmployee)
-//				.map(ResponseEntity::ok)
-//				.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND)
-//						.body(null));
-//	}
+
+	// Update
+	@PutMapping(
+			value = "/{id}",
+			consumes = "application/json",
+			produces = "application/json")
+	public ResponseEntity<EmployeeDto> updateEmployee(
+			@PathVariable("id") UUID id,
+			@RequestBody @Valid EmployeeDto updatedEmployee) {
+		return service.updateEmployee(id, updatedEmployee)
+				.map(ResponseEntity::ok)
+				.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND)
+						.body(null));
+	}
 //	
 //	@PatchMapping(
 //			value = "/{id}",
