@@ -103,7 +103,7 @@ public class EmployeeControllerV1Test {
 		mockMvc.perform(
 				post("/api/v1/employees")
 				.contentType("Application/json")
-				.content(mapper.writeValueAsString(dto)))
+				.content(mapper.writeValueAsString(buildDto())))
 			.andExpect(status().isCreated());		
 	}
 	
@@ -132,39 +132,39 @@ public class EmployeeControllerV1Test {
 		
 	}
 	
-//	// PUT test
-//	@Test 
-//	public void testUpdateEmployee() throws Exception{
-//		EmployeeDto update = buildDto(dto.getBusinessEntityID(), "testLogin");
-//		
-//		
-//		mockMvc.perform(
-//				put("/api/v1/employees/{id}", dto.getBusinessEntityID())
-//				.contentType("application/json")
-//				.content(mapper.writeValueAsString(update)))
-//		.andExpect(status().isOk())
-//		.andExpect(jsonPath("$.loginID")
-//				.value(update.getLoginID()));
-//	}
-//	
-//	// PATCH
-//	@Test
-//	public void testUpdateEmployeeFields() throws Exception {
-//		EmployeeDto partial = buildPartial(dto.getBusinessEntityID(), "testLogin");
-//		
-//		mockMvc.perform(
-//				patch("/api/v1/employees/{id}", dto.getBusinessEntityID())
-//				.contentType("application/json")
-//				.content(mapper.writeValueAsString(partial)))
-//		.andExpect(status().isOk())
-//		.andExpect(jsonPath("$.loginID")
-//				.value(partial.getLoginID()))
-//		.andExpect(jsonPath("$.jobTitle")
-//				.value(dto.getJobTitle()));
-//		
-//		
-//	}
-//	
+	// PUT test
+	@Test 
+	public void testUpdateEmployee() throws Exception{
+		EmployeeDto update = buildDto(dto.getBusinessEntityID(), "testLogin");
+		
+		
+		mockMvc.perform(
+				put("/api/v1/employees/{id}", dto.getBusinessEntityID())
+				.contentType("application/json")
+				.content(mapper.writeValueAsString(update)))
+		.andExpect(status().isOk())
+		.andExpect(jsonPath("$.loginID")
+				.value(update.getLoginID()));
+	}
+	
+	// PATCH
+	@Test
+	public void testUpdateEmployeeFields() throws Exception {
+		EmployeeDto partial = buildPartial(dto.getBusinessEntityID(), "testLogin");
+		
+		mockMvc.perform(
+				patch("/api/v1/employees/{id}", dto.getBusinessEntityID())
+				.contentType("application/json")
+				.content(mapper.writeValueAsString(partial)))
+		.andExpect(status().isOk())
+		.andExpect(jsonPath("$.loginID")
+				.value(partial.getLoginID()))
+		.andExpect(jsonPath("$.jobTitle")
+				.value(dto.getJobTitle()));
+		
+		
+	}
+	
 	// DELETE Test
 	@Test
 	public void testDeleteEmployee() throws Exception {
