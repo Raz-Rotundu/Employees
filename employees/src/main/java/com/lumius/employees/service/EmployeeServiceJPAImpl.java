@@ -16,7 +16,7 @@ import com.lumius.employees.dto.utils.EmployeeConverter;
 import com.lumius.employees.repositories.EmployeeRepository;
 
 @Service
-@Qualifier("JPAImpl")
+@Qualifier("JpaImpl")
 public class EmployeeServiceJPAImpl implements EmployeeService {
 
 	EmployeeRepository repository;

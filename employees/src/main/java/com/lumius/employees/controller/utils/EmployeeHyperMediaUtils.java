@@ -3,6 +3,7 @@ package com.lumius.employees.controller.utils;
 import java.util.List;
 import java.util.stream.Stream;
 
+import org.springframework.data.domain.Page;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.stereotype.Component;
 
@@ -25,18 +26,33 @@ public class EmployeeHyperMediaUtils {
 				.findFirst().get() ;
 	}
 	
-	public EmployeeCollectionDescriptor describeEmployeeCollection(List<EmployeeDto> dtoList) {
+//	public EmployeeCollectionDescriptor describeEmployeeCollection(List<EmployeeDto> dtoList) {
+//		
+//		if(dtoList.isEmpty()) return null;
+//		
+//		List<EmployeeDescriptor> parsedEmployees = parseEmployees(dtoList);
+//		
+//		return Stream.of(new EmployeeCollectionDescriptor())
+//				.peek(cDes -> 
+//					cDes.setEmployeeCollectionDescriptor(parsedEmployees))
+//				.peek(this::addCollectionLink)
+//				.findFirst().get();
+//		
+//		
+//	}
+	
+	public EmployeeCollectionDescriptor describeEmployeePage(Page<EmployeeDto> dtoPage) {
 		
-		if(dtoList.isEmpty()) return null;
+		if (dtoPage.isEmpty() )return null;
 		
-		List<EmployeeDescriptor> parsedEmployees = parseEmployees(dtoList);
+		Page<EmployeeDescriptor> parsedPage = parseEmployees(dtoPage);
 		
 		return Stream.of(new EmployeeCollectionDescriptor())
 				.peek(cDes -> 
-					cDes.setEmployeeCollectionDescriptor(parsedEmployees))
+						cDes.setEmployeeCollectionDescriptor(parsedPage))
 				.peek(this::addCollectionLink)
 				.findFirst().get();
-		
+				
 		
 	}
 	
@@ -48,6 +64,10 @@ public class EmployeeHyperMediaUtils {
 		.toList();
 	}
 	
+	//Parsing a page
+	private Page<EmployeeDescriptor> parseEmployees(Page<EmployeeDto> page){
+		return page.map(this::describeEmployeeDto);
+	}
 	//Helper to add collection links
 	public void addCollectionLink(EmployeeCollectionDescriptor dtoCollection) {
 		dtoCollection.add(
