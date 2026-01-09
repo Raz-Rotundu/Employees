@@ -77,7 +77,13 @@ public class EmployeeControllerV2 {
 			@RequestParam int pageNumber,
 			@RequestParam int pageSize) {
 		
-		throw new UnsupportedOperationException("TODO");
+		return Optional.ofNullable(
+				utils.describeEmployeePage(
+						service.getAllEmployees(pageNumber, pageSize)))
+				.map(described -> 
+						ResponseEntity.ok().body(described))
+				.orElse(ResponseEntity.noContent().build());
+		
 	}
 	
 	//Update
