@@ -21,6 +21,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 public class EmployeeControllerV2Test {
+	
+	private static final String DOMAIN = "localhost";
 
 	private WebApplicationContext webApp;
 	private ObjectMapper mapper;
@@ -57,16 +59,41 @@ public class EmployeeControllerV2Test {
 			.andExpect(status().isCreated());
 	}
 	
-//	// Read
-//	@Test
-//	public void testGetEmployeeById() throws Exception {
-//		
-//	}
-//	
-//	@Test
-//	public void testGetAllEmployees() throws Exception {
-//		
-//	}
+	// Read
+	@Test
+	public void testGetEmployeeById() throws Exception {
+		
+		mockMvc.perform(
+				get("/api/v2/employees/{id}", dto.getBusinessEntityID())
+				.contentType("application/json"))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$._links.self.href")
+					.value("http://" + DOMAIN + "/api/v2/employees/" + dto.getBusinessEntityID()))
+			.andExpect(jsonPath("$.employeeDto.businessEntityID")
+					.value(dto.getBusinessEntityID().toString()));
+		
+	}
+	
+	@Test
+	public void testGetAllEmployees() throws Exception {
+		
+		mockMvc.perform(
+				get("/api/v2/employees")
+				.contentType("application/json"))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$._links.allProperties.href")
+					.value("http://" + DOMAIN + "/api/v2/employees"))
+			.andExpect(jsonPath("$.employeeCollectionDescriptor"
+					+ ".pageable"
+					+ ".pageNumber")
+					.value(1))
+			.andExpect(jsonPath("$.employeeCollectionDescriptor"
+					+ ".pageable"
+					+ ".pageSize")
+					.value(10));
+					
+		
+	}
 //	
 //	// Update
 //	@Test

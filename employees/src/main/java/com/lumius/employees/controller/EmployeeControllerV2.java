@@ -65,7 +65,7 @@ public class EmployeeControllerV2 {
 			value = "/{id}",
 			produces = "application/json")
 	public ResponseEntity<EmployeeDescriptor> getEmployeeById(
-			@PathVariable UUID id) {
+			@PathVariable("id") UUID id) {
 		
 		return  service.getEmployeeByID(id)
 				.map(utils::describeEmployeeDto)
@@ -77,8 +77,8 @@ public class EmployeeControllerV2 {
 	
 	@GetMapping(produces = "application/json")
 	public ResponseEntity<EmployeeCollectionDescriptor> getAllEmployees(
-			@RequestParam int pageNumber,
-			@RequestParam int pageSize) {
+			@RequestParam(name = "pageNumber", defaultValue = "1") int pageNumber,
+			@RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {
 		
 		return Optional.ofNullable(
 				utils.describeEmployeePage(
