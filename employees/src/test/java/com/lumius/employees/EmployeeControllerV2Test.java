@@ -26,6 +26,11 @@ import static org.mockito.Mockito.times;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+/**
+ * @author Razvan
+ * This is the test suite for the HATEOAS controller class
+ * Validates the CRUD operations for the controller as well as the ControllerAdvice
+ */
 @SpringBootTest
 public class EmployeeControllerV2Test {
 	
@@ -180,7 +185,12 @@ public class EmployeeControllerV2Test {
 			.andExpect(status().isNotFound());
 	}
 	
-	// POSTs a dto into the mvc
+	
+	/**
+	 * Helper function to pre-load an EmployeeDto into repository
+	 * @param employee EmplpyeeDTO to be loaded
+	 * @throws Exception
+	 */
 	private void loadDto(EmployeeDto dto) throws Exception{
 		mockMvc.perform(
 				post("/api/v2/employees")
@@ -188,7 +198,10 @@ public class EmployeeControllerV2Test {
 				.content(mapper.writeValueAsString(dto)));
 	}
 	
-	// Build a default dto
+	/**
+	 * Create a default EmployeeDto with all fields filled
+	 * @return
+	 */
 	private EmployeeDto buildDto() {
 		return EmployeeDto.builder()
 				.businessEntityID(UUID.randomUUID())
@@ -208,7 +221,12 @@ public class EmployeeControllerV2Test {
 				.build();
 	}
 	
-	// Build a dto with a custom businessEntityId, loginID
+	/**
+	 * Create an EmployeeDto with specified loginId and businessEntityId
+	 * @param id set businessEntityID
+	 * @param login set loginID
+	 * @return an EmployeeDto with specified loginId and businessEntityId, other fields filled with default values
+	 */
 	private EmployeeDto buildDto(UUID id, String login) {
 		return EmployeeDto.builder()
 				.businessEntityID(id)
@@ -228,7 +246,12 @@ public class EmployeeControllerV2Test {
 				.build();
 	}
 	
-	// Build a partially complete dto, with only businessEntityId and loginID fields initialized
+	/**
+	 * Create a partially complete EmployeeDto object, with only businessEntityID and loginID set
+	 * @param id the businessEntityID
+	 * @param login the loginID
+	 * @return a partially complete EmployeeDto object, with only businessEntityID and loginID set
+	 */
 	private EmployeeDto buildPartialDto(UUID id, String login) {
 		return EmployeeDto.builder()
 				.businessEntityID(id)

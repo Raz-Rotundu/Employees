@@ -11,10 +11,19 @@ import com.lumius.employees.controller.EmployeeControllerV2;
 import com.lumius.employees.dto.EmployeeDto;
 import com.lumius.employees.dto.descriptors.EmployeeCollectionDescriptor;
 import com.lumius.employees.dto.descriptors.EmployeeDescriptor;
+/**
+ * @author Razvan
+ * Utility functions for converting DTOs and collections of DTO to descriptors and collections of descriptors
+ */
 
 @Component
 public class EmployeeHyperMediaUtils {
 	
+	/**
+	 * Convert an EmployeeDto into an EmployeeDescriptor
+	 * @param dto and EmployeeDto
+	 * @return an EmployeeDescriptor with the dto content and a controller reference
+	 */
 	public EmployeeDescriptor describeEmployeeDto(EmployeeDto dto) {
 		return Stream.of(new EmployeeDescriptor() )
 				.peek(descriptor -> 
@@ -26,21 +35,11 @@ public class EmployeeHyperMediaUtils {
 				.findFirst().get() ;
 	}
 	
-//	public EmployeeCollectionDescriptor describeEmployeeCollection(List<EmployeeDto> dtoList) {
-//		
-//		if(dtoList.isEmpty()) return null;
-//		
-//		List<EmployeeDescriptor> parsedEmployees = parseEmployees(dtoList);
-//		
-//		return Stream.of(new EmployeeCollectionDescriptor())
-//				.peek(cDes -> 
-//					cDes.setEmployeeCollectionDescriptor(parsedEmployees))
-//				.peek(this::addCollectionLink)
-//				.findFirst().get();
-//		
-//		
-//	}
-	
+	/**
+	 * Converts page of EmployeeDtos to a EmployeeCollectionDescriptor
+	 * @param dtoPage
+	 * @return
+	 */
 	public EmployeeCollectionDescriptor describeEmployeePage(Page<EmployeeDto> dtoPage) {
 		
 		if (dtoPage.isEmpty() )return null;
@@ -56,7 +55,12 @@ public class EmployeeHyperMediaUtils {
 		
 	}
 	
-	//Parsing helper
+
+	/**
+	 * Converts a list of EmployeeDtos to a list of EmployeeDescriptors
+	 * @param employeesList a list of EmployeeDtos
+	 * @return a list of EmployeeDescriptors
+	 */
 	private List<EmployeeDescriptor> parseEmployees(List<EmployeeDto> employeesList) {
 		
 		return employeesList.stream()
@@ -64,11 +68,22 @@ public class EmployeeHyperMediaUtils {
 		.toList();
 	}
 	
-	//Parsing a page
+
+	/**
+	 * Converts a page of EmployeeDtos to page of EmployeeDescriptors
+	 * @param page a page of EmployeeDtos
+	 * @return a page of EmployeeDescriptors
+	 */
+	
 	private Page<EmployeeDescriptor> parseEmployees(Page<EmployeeDto> page){
 		return page.map(this::describeEmployeeDto);
 	}
-	//Helper to add collection links
+	
+
+	/**
+	 * Helper function to add collection link to a CollectionDescriptor
+	 * @param dtoCollection
+	 */
 	public void addCollectionLink(EmployeeCollectionDescriptor dtoCollection) {
 		dtoCollection.add(
 				WebMvcLinkBuilder.linkTo(EmployeeControllerV2.class)

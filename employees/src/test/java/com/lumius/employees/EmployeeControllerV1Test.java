@@ -185,7 +185,12 @@ public class EmployeeControllerV1Test {
 	
 	
 	
-	// Helper function to preload a Dto into the repository
+
+	/**
+	 * Helper function to pre-load an EmployeeDto into repository
+	 * @param employee EmplpyeeDTO to be loaded
+	 * @throws Exception
+	 */
 	private void loadDto(EmployeeDto employee) throws Exception {
 		mockMvc.perform(
 				post("/api/v1/employees")

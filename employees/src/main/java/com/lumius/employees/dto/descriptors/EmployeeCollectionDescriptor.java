@@ -9,6 +9,10 @@ import org.springframework.hateoas.RepresentationModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+/**
+ * @author Razvan
+ * A HATEOAS descriptor wrapping around a page of EmployeeDescriptors
+ */
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class EmployeeCollectionDescriptor extends RepresentationModel<EmployeeCollectionDescriptor>{
