@@ -47,7 +47,7 @@ public class EmployeeControllerV1Test {
 	private EmployeeDto dto;
 	
 	@MockitoSpyBean
-	@Qualifier("JdbcImpl")
+	@Qualifier("jdbcImpl")
 	private EmployeeService employeeServiceMock;
 	
 	@Autowired

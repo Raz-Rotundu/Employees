@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 
 import com.lumius.employees.dto.EmployeeDto;
 
-@Qualifier("JdbcImpl")
+@Qualifier("jdbcImpl")
 @Service
 public class EmployeeServiceJDBCImpl implements EmployeeService {
 	

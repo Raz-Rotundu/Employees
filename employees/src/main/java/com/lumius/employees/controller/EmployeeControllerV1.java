@@ -36,7 +36,7 @@ public class EmployeeControllerV1 {
 	EmployeeService service;
 	
 	public EmployeeControllerV1(
-			@Qualifier("JdbcImpl") EmployeeService service) {
+			@Qualifier("jdbcImpl") EmployeeService service) {
 				this.service = service;
 			}
 	

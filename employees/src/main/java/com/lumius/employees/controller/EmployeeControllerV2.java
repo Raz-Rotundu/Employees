@@ -39,7 +39,7 @@ public class EmployeeControllerV2 {
 	EmployeeHyperMediaUtils utils;
 	
 	public EmployeeControllerV2(
-			@Qualifier("JpaImpl") EmployeeService service ,
+			@Qualifier("jpaImpl") EmployeeService service ,
 			EmployeeHyperMediaUtils utils) {
 		
 		this.service = service;
@@ -95,7 +95,7 @@ public class EmployeeControllerV2 {
 			consumes = "application/json",
 			produces = "application/json")
 	public ResponseEntity<EmployeeDescriptor> updateEmployee(
-			@PathVariable UUID id,
+			@PathVariable("id") UUID id,
 			@RequestBody EmployeeDto newEmployee) {
 		
 		return service.updateEmployee(id, newEmployee)
@@ -111,8 +111,8 @@ public class EmployeeControllerV2 {
 			consumes = "application/json",
 			produces = "application/json")
 	public ResponseEntity<EmployeeDescriptor> updateEmployeeFields(
-			@PathVariable UUID id,
-			@RequestParam EmployeeDto dto) {
+			@PathVariable("id") UUID id,
+			@RequestBody EmployeeDto dto) {
 		
 		return service.updateEmployeeFields(id, dto)
 				.map(utils::describeEmployeeDto)
@@ -124,7 +124,7 @@ public class EmployeeControllerV2 {
 	//Delete
 	@DeleteMapping(value = "/{id}")
 	public ResponseEntity<Void> deleteEmployeeById(
-			@PathVariable UUID id) {
+			@PathVariable("id") UUID id) {
 		
 		return service.deleteEmployeeById(id)
 				.map(utils::describeEmployeeDto)
