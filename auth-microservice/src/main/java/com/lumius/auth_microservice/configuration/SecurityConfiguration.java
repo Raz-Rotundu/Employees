@@ -16,11 +16,21 @@ import org.springframework.security.web.DefaultSecurityFilterChain;
 @Configuration
 public class SecurityConfiguration {
 	
+	/**
+	 * Returns password encoder so that passwords aren't stored plaintext
+	 * @return
+	 */
 	@Bean
 	PasswordEncoder passwordEncode() {
 		return new BCryptPasswordEncoder();
 	}
 
+	/**
+	 * Configures the SecurityFilterChain to allow all requests to /users/register, /users/token enpoints
+	 * Sets session type to stateless
+	 * @param http namespace csecurity configuration element
+	 * @return Configured SecurityFilterChain
+	 */
 	@Bean
 	DefaultSecurityFilterChain configure(HttpSecurity http) {
 		return http
