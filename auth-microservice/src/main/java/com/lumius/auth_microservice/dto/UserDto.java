@@ -18,5 +18,5 @@ import lombok.NoArgsConstructor;
 public class UserDto {
 	String email;
 	String password;
-	UserType type;
+	UserType userType;
 }
