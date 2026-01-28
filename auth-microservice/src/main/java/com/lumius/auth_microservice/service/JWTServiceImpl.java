@@ -10,9 +10,15 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
+import java.util.Date;
 
 import com.lumius.auth_microservice.dto.TokenRequest;
 import com.lumius.auth_microservice.dto.TokenResponse;
+import com.nimbusds.jose.JWSAlgorithm;
+import com.nimbusds.jose.JWSHeader;
+import com.nimbusds.jose.crypto.RSASSASigner;
+import com.nimbusds.jwt.JWTClaimsSet;
+import com.nimbusds.jwt.SignedJWT;
 
 public class JWTServiceImpl implements JWTService {
 	
@@ -20,7 +26,7 @@ public class JWTServiceImpl implements JWTService {
 		
 		try {
 			
-			// Setup KeyPairGenerator with RSA algorith
+			// Setup KeyPairGenerator with RSA algorithm
 			KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");	
 			
 			// Generate RSA keypair
@@ -86,23 +92,48 @@ public class JWTServiceImpl implements JWTService {
 	@Override
 	public TokenResponse getJWTToken(TokenRequest request, String scope, String userId) {
 
-		// TODO make the keyID something relevant
-		String keyId = "ServerKeyID";
+		try {
+			
+			// TODO make the keyID something relevant
+			String keyId = "ServerKeyID";
+			
+			// Load RSA keyPair into memory
+			KeyPair keyPair = loadRsaKey();
+			PublicKey publicKey = keyPair.getPublic();
+			PrivateKey privateKey = keyPair.getPrivate();
+			
+			// Create JWTClaimSet
+			Date issueTime = new Date();
+			Date expiryTime = new Date(System.currentTimeMillis() + 3600000);
+			
+			JWTClaimsSet claims = new JWTClaimsSet.Builder()
+					.subject(userId)
+					.claim("scope", scope)
+					.issueTime(issueTime)
+					.expirationTime(expiryTime)
+					.build();
+			
+			// Create SignedJWT
+			SignedJWT token = new SignedJWT(
+					new JWSHeader.Builder(JWSAlgorithm.RS256)
+						.keyID(keyId)
+						.build(),
+					claims);
+					
+			
+			// Sign
+			token.sign(new RSASSASigner(privateKey));
+			
+			// Serialize
+			String accessToken = token.serialize();
+			
+			// Return TokenResponse		
+			return new TokenResponse(accessToken, "Bearer", "3600", scope);
+			
+		} catch (Exception e) {
+			throw new RuntimeException("Error creating token", e);
+		}
 		
-		// Load RSA keyPair into memory
-		
-		// Create JWTClaimSet
-		
-		// Create SignedJWT
-		
-		// Sign
-		
-		// Serialize
-		
-		// Return TokenResponse
-		
-		
-		return null;
 	}
 
 }
