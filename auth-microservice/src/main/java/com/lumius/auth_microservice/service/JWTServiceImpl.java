@@ -67,7 +67,7 @@ public class JWTServiceImpl implements JWTService {
 		
 		try {
 			
-			// TODO create config file to contain service's private and public keys	
+			
 			byte[] publicKeyBytes = Base64.getDecoder().decode(publicKeyEncoded);
 			byte[] privateKeyBytes = Base64.getDecoder().decode(privateKeyEncoded);
 			
