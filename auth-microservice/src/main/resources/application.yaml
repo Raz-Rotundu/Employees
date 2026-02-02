@@ -24,6 +24,7 @@ client:
 	secret: ${CLIENT_SECRET}
 	
 server:
+	port: 8081
 	public: ${SERVER_KEY_PUB}
 	private: ${SERVER_KEY_PRIV}
 	
