@@ -12,6 +12,8 @@ import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 import java.util.Date;
 
+import org.springframework.beans.factory.annotation.Value;
+
 import com.lumius.auth_microservice.dto.TokenRequest;
 import com.lumius.auth_microservice.dto.TokenResponse;
 import com.nimbusds.jose.JWSAlgorithm;
@@ -21,6 +23,12 @@ import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 
 public class JWTServiceImpl implements JWTService {
+	
+	@Value("${server.public}")
+	private String publicKeyEncoded;
+	
+	@Value("${server.private}")
+	private String privateKeyEncoded;
 	
 	private KeyPair generateRsaKey() {
 		
@@ -60,8 +68,8 @@ public class JWTServiceImpl implements JWTService {
 		try {
 			
 			// TODO create config file to contain service's private and public keys	
-			byte[] publicKeyBytes = Base64.getDecoder().decode("ChangeMePublic");
-			byte[] privateKeyBytes = Base64.getDecoder().decode("ChangeMePrivate");
+			byte[] publicKeyBytes = Base64.getDecoder().decode(publicKeyEncoded);
+			byte[] privateKeyBytes = Base64.getDecoder().decode(privateKeyEncoded);
 			
 			//Create spec?
 			X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(publicKeyBytes);

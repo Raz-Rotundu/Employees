@@ -1,3 +1,29 @@
 spring:
   application:
     name: auth-microservice
+
+datasource:
+	url: jdbc:h2:mem:testdb
+	driverClassName: org.h2.Driver
+	username: user
+	password: pwd
+
+h2:
+	console: true
+	enables: true
+	
+jpa:
+	hibernate:
+		ddl-auto: update
+	show-sql: true
+		
+
+# Keys from environmental variables
+client:
+	id: ${CLIENT_ID}
+	secret: ${CLIENT_SECRET}
+	
+server:
+	public: ${SERVER_KEY_PUB}
+	private: ${SERVER_KEY_PRIV}
+	
