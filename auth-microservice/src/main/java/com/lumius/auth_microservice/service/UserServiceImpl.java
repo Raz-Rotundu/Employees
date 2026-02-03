@@ -4,6 +4,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import com.lumius.auth_microservice.dto.UserDto;
 import com.lumius.auth_microservice.dto.utils.UserConverter;
@@ -11,6 +12,7 @@ import com.lumius.auth_microservice.entity.UserEntity;
 import com.lumius.auth_microservice.enumerable.UserType;
 import com.lumius.auth_microservice.repository.UserRepository;
 
+@Service
 public class UserServiceImpl implements UserService {
 
 	private final PasswordEncoder passwordEncoder;

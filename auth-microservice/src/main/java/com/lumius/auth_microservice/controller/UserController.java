@@ -59,14 +59,18 @@ public class UserController {
 					.body(null);
 		}
 		
+		//ERROR HERE
 		// Unauthorized client
 		if(!clientService.validateClient(tokenRequest.client_id(), tokenRequest.client_secret())) {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+			return ResponseEntity
+					.status(HttpStatus.UNAUTHORIZED)
 					.body(null);
 		}
 		
+		//ERROR HERE
 		if(!userService.validateUser(tokenRequest.username(), tokenRequest.password())) {
-			return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+			return ResponseEntity.
+					status(HttpStatus.UNAUTHORIZED)
 					.body(null);
 		}
 		

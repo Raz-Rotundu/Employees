@@ -1,7 +1,10 @@
 package com.lumius.auth_microservice.service;
 
+import org.springframework.stereotype.Service;
+
 import com.lumius.auth_microservice.enumerable.UserType;
 
+@Service
 public class ScopeServiceImpl implements ScopeService {
 
 	@Override

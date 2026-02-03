@@ -32,6 +32,7 @@ public class UserConverter {
 	 */
 	public static UserDto convertToUserDto(UserEntity entity) {
 		return UserDto.builder()
+				.id(entity.getId())
 				.email(entity.getEmail())
 				.password(entity.getPassword())
 				.userType(entity.getUserType())

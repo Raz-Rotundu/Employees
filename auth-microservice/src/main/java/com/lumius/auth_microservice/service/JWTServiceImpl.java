@@ -13,6 +13,7 @@ import java.util.Base64;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import com.lumius.auth_microservice.dto.TokenRequest;
 import com.lumius.auth_microservice.dto.TokenResponse;
@@ -22,6 +23,7 @@ import com.nimbusds.jose.crypto.RSASSASigner;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 
+@Service
 public class JWTServiceImpl implements JWTService {
 	
 	@Value("${server.public}")
