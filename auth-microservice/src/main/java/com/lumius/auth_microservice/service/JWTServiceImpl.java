@@ -69,7 +69,6 @@ public class JWTServiceImpl implements JWTService {
 		
 		try {
 			
-			
 			byte[] publicKeyBytes = Base64.getDecoder().decode(publicKeyEncoded);
 			byte[] privateKeyBytes = Base64.getDecoder().decode(privateKeyEncoded);
 			
@@ -83,6 +82,8 @@ public class JWTServiceImpl implements JWTService {
 			
 			//Create Keypair
 			PublicKey publicKey = keyFactory.generatePublic(publicKeySpec);
+			
+			//ERROR HERE: algid parse error, not a sequence
 			PrivateKey privateKey = keyFactory.generatePrivate(privateKeySpec);
 			
 			KeyPair pair = new KeyPair(publicKey, privateKey);
@@ -131,7 +132,7 @@ public class JWTServiceImpl implements JWTService {
 					claims);
 					
 			
-			// Sign
+			// Sign (Length must be 2048 bits)
 			token.sign(new RSASSASigner(privateKey));
 			
 			// Serialize
