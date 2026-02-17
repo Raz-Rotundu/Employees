@@ -126,7 +126,7 @@ public class EmployeeServiceJDBCImpl implements EmployeeService {
 	}
 
 	@Override
-	public Optional<EmployeeDto> deleteEmployeeById(UUID id) {
+	public Optional<EmployeeDto> deleteEmployeeById(UUID id, String userId) {
 		StringBuilder queryString = new StringBuilder();
 		MapSqlParameterSource params = new MapSqlParameterSource();
 		

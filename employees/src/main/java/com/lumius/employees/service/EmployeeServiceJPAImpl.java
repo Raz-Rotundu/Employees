@@ -13,16 +13,25 @@ import org.springframework.stereotype.Service;
 
 import com.lumius.employees.dto.EmployeeDto;
 import com.lumius.employees.dto.utils.EmployeeConverter;
+import com.lumius.employees.entities.EmployeeEntity;
 import com.lumius.employees.repositories.EmployeeRepository;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
 
 @Service
 @Qualifier("jpaImpl")
 public class EmployeeServiceJPAImpl implements EmployeeService {
 
 	EmployeeRepository repository;
+	EntityManagerFactory entityManagerFactory;
 	
-	public EmployeeServiceJPAImpl(EmployeeRepository repository) {
+	public EmployeeServiceJPAImpl(EmployeeRepository repository,
+			EntityManagerFactory entityManagerFactory) {
+		
 		this.repository = repository;
+		this.entityManagerFactory = entityManagerFactory;
 	}
 	
 	
@@ -104,12 +113,39 @@ public class EmployeeServiceJPAImpl implements EmployeeService {
 	}
 
 	@Override
-	public Optional<EmployeeDto> deleteEmployeeById(UUID id) {
-		Optional<EmployeeDto> employeeOptional = repository.findById(id)
-				.map(EmployeeConverter::toDTO);
+	public Optional<EmployeeDto> deleteEmployeeById(UUID id, String userId) {
 		
-		repository.deleteById(id);
-		return employeeOptional;
+		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		
+		EntityTransaction transaction = entityManager.getTransaction();
+		
+		try {
+			transaction.begin();
+			 EmployeeEntity employeeEntity = entityManager.find(EmployeeEntity.class, transaction);
+			 
+			 // Target ID does not match the ID of the user requesting the delete
+			 if(!employeeEntity.getBusinessEntityID().equals(userId)) {
+				 transaction.rollback();
+				 return Optional.empty();
+				 
+			// Valid users do the deletion
+			 } else {
+				 EmployeeDto dto = EmployeeConverter.toDTO(employeeEntity);
+				 entityManager.remove(employeeEntity);
+				 transaction.commit();
+				 return Optional.ofNullable(dto);
+			 }
+			
+		} catch(Exception ex) {
+			if(transaction.isActive()) {
+				transaction.rollback();
+			}
+			
+			throw(ex);
+			
+		} finally {
+			entityManager.close();
+		}
 	}
 	
 	// Comparison helper

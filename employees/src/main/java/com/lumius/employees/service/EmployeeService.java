@@ -60,7 +60,7 @@ public interface EmployeeService {
 	 * @param id ID of existing employee
 	 * @return Empty Optional 
 	 */
-	Optional<EmployeeDto> deleteEmployeeById(UUID id);
+	Optional<EmployeeDto> deleteEmployeeById(UUID id, String userId);
 
 	
 	
