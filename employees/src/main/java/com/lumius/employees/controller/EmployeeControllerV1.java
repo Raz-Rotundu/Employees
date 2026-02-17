@@ -118,7 +118,7 @@ public class EmployeeControllerV1 {
 		Jwt jwt = (Jwt) authentication.getPrincipal();
 		String userId = jwt.getClaim("sub");
 		
-		return service.deleteEmployeeById(id)
+		return service.deleteEmployeeById(id, userId)
 				.map(opt -> 
 				ResponseEntity.noContent()
 					.<Void>build())
