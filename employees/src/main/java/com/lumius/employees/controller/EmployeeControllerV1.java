@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,6 +48,7 @@ public class EmployeeControllerV1 {
 	@PostMapping(
 			consumes = "application/json",
 			produces = "application/json")
+	@PreAuthorize("hasAuthority('SCOPE_employees_table:write')")
 	public ResponseEntity<EmployeeDto> createEmployee(
 			@RequestBody EmployeeDto newEmployee) {
 		return ResponseEntity.status(HttpStatus.CREATED)
@@ -55,6 +59,7 @@ public class EmployeeControllerV1 {
 	@GetMapping(
 			value = "/{id}",
 			produces = "application/json")
+	@PreAuthorize("hasAuthority('SCOPE_employees_table:read')")
 	public ResponseEntity<EmployeeDto> getEmployee(
 			@PathVariable("id") UUID id) {
 		return service.getEmployeeByID(id)
@@ -65,6 +70,7 @@ public class EmployeeControllerV1 {
 	
 	@GetMapping(
 			produces = "application/json")
+	@PreAuthorize("hasAuthority('SCOPE_employees_table:read')")
 	public ResponseEntity<Page<EmployeeDto>> getAllEmployees(
 			@RequestParam(name = "pageNum", defaultValue = "1") int pageNum,
 			@RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {
@@ -77,6 +83,7 @@ public class EmployeeControllerV1 {
 			value = "/{id}",
 			consumes = "application/json",
 			produces = "application/json")
+	@PreAuthorize("hasAuthority('SCOPE_employees_table:write')")
 	public ResponseEntity<EmployeeDto> updateEmployee(
 			@PathVariable("id") UUID id,
 			@RequestBody @Valid EmployeeDto updatedEmployee) {
@@ -90,6 +97,7 @@ public class EmployeeControllerV1 {
 			value = "/{id}",
 			consumes = "application/json",
 			produces = "application/json")
+	@PreAuthorize("hasAuthority('SCOPE_employees_table:write')")
 	public ResponseEntity<EmployeeDto> updateEmployeeFields(
 			@PathVariable("id") UUID id,
 			@RequestBody EmployeeDto newEmployee) {
@@ -102,8 +110,14 @@ public class EmployeeControllerV1 {
 	// Delete
 	@DeleteMapping(
 			value = "/{id}")
+	@PreAuthorize("hasAuthority('SCOPE_employees_table:write')")
 	public ResponseEntity<Void> deleteEmployee(
-			@PathVariable("id") UUID id) {
+			@PathVariable("id") UUID id,
+			Authentication authentication) {
+		
+		Jwt jwt = (Jwt) authentication.getPrincipal();
+		String userId = jwt.getClaim("sub");
+		
 		return service.deleteEmployeeById(id)
 				.map(opt -> 
 				ResponseEntity.noContent()
